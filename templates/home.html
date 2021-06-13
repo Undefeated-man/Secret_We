@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="description" content="We-ARE One page parallax responsive HTML Template ">
+        
+        <meta name="author" content="Muhammad Morshed">
+		
+        <title>We ARE</title>
+		
+		<!-- Mobile Specific Meta
+		================================================== -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- Favicon -->
+		<link rel="shortcut icon" type="image/x-icon" href="img/favicon.png" />
+		
+		<!-- CSS
+		================================================== -->
+		<!-- Fontawesome Icon font -->
+        <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+		<!-- bootstrap.min css -->
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+		<!-- Animate.css -->
+        <link rel="stylesheet" href="/static/css/animate.css">
+		<!-- Owl Carousel -->
+        <link rel="stylesheet" href="/static/css/owl.carousel.css">
+		<!-- Grid Component css -->
+        <link rel="stylesheet" href="/static/css/component.css">
+		<!-- Slit Slider css -->
+        <link rel="stylesheet" href="/static/css/slit-slider.css">
+		<!-- Main Stylesheet -->
+        <link rel="stylesheet" href="/static/css/main.css">
+		<!-- Media Queries -->
+        <link rel="stylesheet" href="/static/css/media-queries.css">
+
+		<!--
+		Google Font
+		=========================== -->                    
+		
+		<!-- Oswald / Title Font -->
+		<link href='http://fonts.googleapis.com/css?family=Oswald:400,300' rel='stylesheet' type='text/css'>
+		<!-- Ubuntu / Body Font -->
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300' rel='stylesheet' type='text/css'>
+		
+		<!-- Modernizer Script for old Browsers -->		
+        <script src="/static/js/modernizr-2.6.2.min.js"></script>
+		
+		<script>
+			function done(id){
+				var regex = /.*csrftoken=([^;.]*).*$/ ;
+				var xCSRFToken = document.cookie.match(regex) === null ? null : document.cookie.match(regex)[1];
+				
+				$.ajaxSetup({
+					headers: {
+						"X-CSRFToken":xCSRFToken
+					},
+				});
+				
+				$.ajax({
+						url:"/home/done/",
+						data:{
+							"id": id,
+							},
+						type:"POST",
+						success:function (data) {
+							window.location.href = 'http://127.0.0.1:8000/home/done/';
+						}
+				})
+			}
+		</script>
+	
+    </head>
+	
+    <body id="body">
+	    <!--
+	    Start Preloader
+	    ==================================== -->
+		<div id="loading-mask">
+			<div class="loading-img">
+				<img alt="WeARE Preloader" src="/static/img/preloader.gif"  />
+			</div>
+		</div>
+        <!--
+        End Preloader
+        ==================================== -->
+		
+        <!--
+        Welcome Slider
+        ==================================== -->
+		<section id="home">	    
+		
+            <div id="slitSlider" class="sl-slider-wrapper">
+				<div class="sl-slider">
+					
+					<!-- single slide item -->
+					<div class="sl-slide" data-orientation="horizontal" data-slice1-rotation="-25" data-slice2-rotation="-25" data-slice1-scale="2" data-slice2-scale="2">
+						<div class="sl-slide-inner">
+							<div class="bg-img bg-img-1"></div>
+						<div class="carousel-caption">
+							<div>
+								<img class="wow fadeInUp" src="/static/img/we.png" alt="We Are">
+								<h3 data-wow-duration="500ms"  data-wow-delay="500ms" class="heading animated fadeInRight">Welcome home, <strong style="font-size:150%">{{username}}</strong></h2>
+							</div>
+						</div>
+						</div>
+					</div>
+					<!-- /single slide item -->
+					
+					<!-- single slide item -->
+					<div class="sl-slide" data-orientation="vertical" data-slice1-rotation="10" data-slice2-rotation="-15" data-slice1-scale="1.5" data-slice2-scale="1.5">
+						<div class="sl-slide-inner">
+							<div class="bg-img bg-img-2"></div>
+						<div class="carousel-caption">
+							<div>
+								<h2 class="heading animated fadeInDown">Build our own Place</h2>
+								<h3 class="animated fadeInUp">We can add up some interesting functions here to make our house more colorful!</h3>
+								<a class="btn btn-green animated fadeInUp" href="#goal">Get Started</a>
+							</div>
+						</div>
+						</div>
+					</div>
+					<!-- /single slide item -->
+
+				</div><!-- /sl-slider -->
+				
+				<nav id="nav-arrows" class="nav-arrows">
+					<span class="nav-arrow-prev">Previous</span>
+					<span class="nav-arrow-next">Next</span>
+				</nav>
+
+				<nav id="nav-dots" class="nav-dots">
+					<span class="nav-dot-current"></span>
+					<span></span>
+				</nav>
+
+			</div><!-- /slider-wrapper -->
+		</section>
+		<!--/#home section-->
+		
+        <!-- 
+        Fixed Navigation
+        ==================================== -->
+        <header id="navigation" class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- responsive nav button -->
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+					<!-- /responsive nav button -->
+					
+					<!-- logo -->
+                    <a class="navbar-brand" href="#body">
+						<h1 id="logo">
+							<img src="/static/img/logo-we.png" alt="We Are" />
+						</h1>
+					</a>
+					<!-- /logo -->
+                </div>
+
+				<!-- main nav -->
+                <nav class="collapse navbar-collapse navbar-right" role="Navigation">
+                    <ul id="nav" class="nav navbar-nav">
+                        <li class="current"><a href="#body" style="font-size:150%; margin-top:8px;">Home</a></li>
+                        <li><a href="#goal" style="font-size:150%; margin-top:8px;">Semester goals</a></li>
+                        <li><a href="#do-together" style="font-size:150%; margin-top:8px;">Do together</a></li>
+                        <li><a href="#tools" style="font-size:150%; margin-top:8px;">Tools</a></li>
+                        <li><a href="#pricing" style="font-size:150%; margin-top:8px;">Pricing</a></li>
+                    </ul>
+                </nav>
+				<!-- /main nav -->
+				
+            </div>
+        </header>
+        <!--
+        End Fixed Navigation
+        ==================================== -->
+		
+		<!--
+		Start Goals Section
+		==================================== -->
+		<section id="goal" class="bg-one">
+			<div class="container">
+				<div class="row">
+					
+					<!-- section title -->
+					<div class="title text-center wow fadeIn" data-wow-duration="1500ms" >
+						<h2>Semester <span class="color">Goals</span></h2>
+						<div class="border"></div>
+					</div>
+					<!-- /section title -->
+					
+					<div class="col-md-4 text-center wow fadeInUp" data-wow-duration="500ms" >
+						<div class="wrap-about">							
+							<div class="icon-box">
+								<i class="fa fa-lightbulb-o fa-4x"></i>
+							</div>					
+							<!-- Express About Yourself -->
+							<div class="about-content text-center">
+								<h3 class="ddd">We're Creative</h3>								
+								<p>Let's find something interesting and share them every day!</p>
+							</div>
+						</div>
+					</div> 
+					<!-- End About item -->
+					
+					<!-- About item -->
+					<div class="col-md-4 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="250ms">
+						<div class="wrap-about">
+							<div class="icon-box">
+								<i class="fa fa-users fa-4x"></i>
+							</div>
+							<!-- Express About Yourself -->
+							<div class="about-content text-center">
+								<h3>We're Awesome</h3>
+								<p>We always try our best to do everything! Thanks to God that let us meet each other!</p>
+							</div>
+						</div>
+					</div>
+					<!-- End About item -->
+					
+					<!-- About item -->					
+					<div class="col-md-4 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="500ms">
+						<div class="wrap-about kill-margin-bottom">
+							<div class="icon-box">
+								<i class="fa fa-users fa-4x"></i>
+							</div>
+							<!-- Express About Yourself -->
+							<div class="about-content text-center">
+								<h3>We're Self-disciplined</h3>
+								<p>We can finish our goals excellently!</p>
+							</div>
+						</div>
+					</div>  
+					<!-- End About item -->
+					
+					<!-- About item -->
+					<div class="row" style="margin-top:30%">
+						<form class="col-12" method="post">
+							<div class="card">
+								<div class="card-body"  style="font-size:120%;  margin-left:15px;">
+									<h4 style="font-size:120%; margin-left:15px;">Semester Goals</h4>
+									<div class="table-responsive">
+										<table class="table" id="inline-editable">
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>No.#</th>
+													<th>生活习惯</th>
+													<th>学习目标</th>
+													<th>兴趣</th>
+												</tr>
+											</thead>                                           
+											<tbody>
+												<tr>
+													<td>{{gid}}</td>
+													<td>1</td>
+													<td>{{life}}</td>
+													<td>{{study}}</td>
+													<td>{{interest}}</td>
+												</tr>
+												<tr>
+													<td>{{gid}}</td>
+													<td>2</td>
+													<td>{{life}}</td>
+													<td>{{study}}</td>
+													<td>{{interest}}</td>
+												</tr>
+												<tr>
+													<td>{{gid}}</td>
+													<td>3</td>
+													<td>{{life}}</td>
+													<td>{{study}}</td>
+													<td>{{interest}}</td>
+												</tr>
+											</tbody>
+										{% csrf_token %}
+										</table>
+									</div> <!-- end .table-responsive-->
+								</div> <!-- end card-body -->
+							</div> <!-- end card -->
+						</form> <!-- end col -->
+					</div>
+					<br />
+					<br />
+					<br />
+					<!-- About item -->
+					<div class="row">
+						<form class="col-12" method="post">
+							<div class="card">
+								<div class="card-body"  style="font-size:120%;  margin-left:15px;">
+									<h4 style="font-size:120%; margin-left:15px;">Showing the Semester Goals</h4>
+									<div class="table-responsive">
+										<table class="table" id="show-table">
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>No.#</th>
+													<th>生活习惯</th>
+													<th>学习目标</th>
+													<th>兴趣</th>
+												</tr>
+											</thead>                                           
+											<tbody>
+												<tr>
+													<td>{{gid}}</td>
+													<td>1</td>
+													<td>{{life}}</td>
+													<td>{{study}}</td>
+													<td>{{interest}}</td>
+												</tr>
+												<tr>
+													<td>{{gid}}</td>
+													<td>2</td>
+													<td>{{life}}</td>
+													<td>{{study}}</td>
+													<td>{{interest}}</td>
+												</tr>
+												<tr>
+													<td>{{gid}}</td>
+													<td>3</td>
+													<td>{{life}}</td>
+													<td>{{study}}</td>
+													<td>{{interest}}</td>
+												</tr>
+											</tbody>
+										{% csrf_token %}
+										</table>
+									</div> <!-- end .table-responsive-->
+								</div> <!-- end card-body -->
+							</div> <!-- end card -->
+						</form> <!-- end col -->
+					</div>
+					
+				</div> 		<!-- End row -->
+			</div>   	<!-- End container -->
+		</section>   <!-- End section -->
+		
+		<!--
+		Start Counter Section
+		==================================== -->
+		
+		<section id="counter" class="parallax-section">
+			<div class="container">
+				<div class="row" style="padding-left:8%">
+				
+					<!-- first count item -->
+					<div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInDown" data-wow-duration="500ms" style="margin-left:5%">
+						<div class="counters-item">
+							<div>
+							    <span data-speed="3000" data-to="365">365</span>
+							</div>
+							<i class="fa fa-users fa-3x"></i>
+							<h3>Happy Every Day</h3>
+						</div>
+					</div>
+					<!-- end first count item -->
+				
+					<!-- second count item -->
+					<div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInDown" data-wow-duration="500ms" data-wow-delay="400ms" style="margin-left:5%">
+						<div class="counters-item">
+							<div>
+							    <span data-speed="3000" data-to="120">120%</span>
+								<span>%</span>
+							</div>
+							<i class="fa fa-thumbs-up fa-3x"></i>
+				            <h3>Try our Best</h3>
+							
+						</div>
+					</div>
+					<!-- end third count item -->
+					
+					<!-- third count item -->
+					<div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInDown" data-wow-duration="500ms" data-wow-delay="600ms" style="margin-left:5%">
+						<div class="counters-item kill-margin-bottom">
+							<div>
+							    <span data-speed="3000" data-to="1314">1314</span>
+							</div>
+							<i class="fa fa-coffee fa-3x"></i>
+							<h3>Do all WELL</h3>
+						</div>
+					</div>
+					<!-- end fourth count item -->
+					
+				</div> 		<!-- end row -->
+			</div>   	<!-- end container -->
+		</section>   <!-- end section -->
+		
+		
+		<!-- Start do-together Section
+		=========================================== -->
+		
+		<section id="do-together">
+			<div class="container">
+				<div class="row wow fadeInDown" data-wow-duration="500ms">
+					<div class="col-lg-12">
+					
+						<!-- section title -->
+						<div class="title text-center">
+							<h2>Things we wanna <span class="color">do together</span></h2>
+							<div class="border"></div>
+						</div>
+						<!-- /section title -->
+					
+						<!-- portfolio item filtering -->
+						<div class="portfolio-filter clearfix">
+							<ul class="text-center">
+							    <li><a href="javascript:void(0)" class="filter" data-filter="all">All</a></li>
+								<li><a href="javascript:void(0)" class="filter" data-filter=".book">Books</a></li>
+								<li><a href="javascript:void(0)" class="filter" data-filter=".film">Films</a></li>
+								<li><a href="javascript:void(0)" class="filter" data-filter=".place">Places</a></li>
+								<li><a href="javascript:void(0)" class="filter" data-filter=".others">Others</a></li>
+							</ul>
+						</div>
+						<!-- /portfolio item filtering -->
+						
+					</div> <!-- /end col-lg-12 -->
+				</div> <!-- end row -->
+			</div>	<!-- end container -->
+	
+			<!-- portfolio items -->
+			<div class="portfolio-item-wrapper wow fadeInUp" data-wow-duration="500ms">
+                <ul id="og-grid" class="og-grid">
+				
+					<!-- single portfolio item -->	
+					<li class="mix book">
+						<a href="javascript:done('{{id}}')" data-largesrc="img/portfolio/portx1.jpg" data-title="《1Q84》" data-description="A novel written by Japanese writer Haruki Murakam." id="{{id}}">
+							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
+							<div class="hover-mask">
+								<h3>《1Q84》</h3>
+								<span>
+									<i class="fa fa-plus fa-2x"></i>
+								</span>
+							</div>
+						</a>
+					</li>
+					<!-- /single portfolio item -->
+					
+					<!-- single portfolio item -->
+					<li class="mix film">
+						<a href="javascript:void(0)" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="《无问西东》" data-description="暂时想不到其他想看的，你想留着跟妈看的话。后面你再想一个吧。">
+							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
+							<div class="hover-mask">
+								<h3>《无问西东》</h3>
+								<span>
+									<i class="fa fa-plus fa-2x"></i>
+								</span>
+							</div>
+						</a>
+					</li>
+					<!-- /single portfolio item -->
+					
+					<!-- single portfolio item -->
+					<li class="mix place">
+						<a href="javascript:void(0)" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="上海迪士尼" data-description="等疫情结束，过去上海找你，再一起过去!">
+							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
+							<div class="hover-mask">
+								<h3>上海迪士尼</h3>
+								<span>
+									<i class="fa fa-plus fa-2x"></i>
+								</span>
+							</div>
+						</a>
+					</li>
+					<!-- /single portfolio item -->
+					
+					<!-- single portfolio item -->
+					<li class="mix others">
+						<a href="javascript:void(0)" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="Swimming" data-description="Go swimming in the summer vacation.">
+							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
+							<div class="hover-mask">
+								<h3>Swimming</h3>
+								<span>
+									<i class="fa fa-plus fa-2x"></i>
+								</span>
+							</div>
+						</a>
+					</li>
+					<!-- /single portfolio item -->
+					
+				</ul> <!-- end og grid -->
+			</div>  <!-- portfolio items wrapper -->
+			
+		</section>   <!-- End section -->
+		
+		<!-- Srart Add-together Us
+		=========================================== -->		
+		<section id="add-together">
+			<div class="container">
+				<div class="row">
+					
+					<!-- section title -->
+					<div class="title text-center wow fadeIn" data-wow-duration="500ms">
+						<h2>Add something wanna <span class="color">Do Together</span></h2>
+						<div class="border"></div>
+					</div>
+					<!-- /section title -->
+					
+					<!-- Contact Details -->
+					<div class="contact-info col-md-6 wow fadeInUp" data-wow-duration="500ms">
+						<h3>Things Details</h3>
+						<p>Pick the types and add some details of it:</p>
+						<div class="contact-details">
+							<div class="con-info clearfix">
+								<i class="fa fa-book fa-lg"></i>
+								<span>Books</span>
+							</div>
+							
+							<div class="con-info clearfix">
+								<i class="fa fa-film fa-lg"></i>
+								<span>Films</span>
+							</div>
+							
+							<div class="con-info clearfix">
+								<i class="fa fa-car fa-lg"></i>
+								<span>Places</span>
+							</div>
+							
+							<div class="con-info clearfix">
+								<i class="fa fa-envelope fa-lg"></i>
+								<span>Others</span>
+							</div>
+						</div>
+					</div>
+					<!-- / End Contact Details -->
+						
+					<!-- Contact Form -->
+					<div class="contact-form col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="300ms">
+						<form id="contact-form" method="post" action="sendmail.php" role="form">
+							<div class="form-group">
+								<select class="form-control" id="status-select" name="type">
+									<option selected="" value="book" style="background:rgb(43,44,48); color:rgb(255,255,255); font-size:120%">Book</option>
+									<option value="film" style="background:rgb(43,44,48); color:rgb(255,255,255); font-size:120%">Film</option>
+									<option value="lace" style="background:rgb(43,44,48); color:rgb(255,255,255); font-size:120%">Place</option>
+									<option value="other" style="background:rgb(43,44,48); color:rgb(255,255,255); font-size:120%">Others</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<input type="text" placeholder="Things your wanna add to do together" class="form-control" name="name" id="name">
+							</div>
+							
+							<div class="form-group">
+								<input type="text" placeholder="When do you wanna do it?" class="form-control" name="time" id="time">
+							</div>
+							
+							<div class="form-group">
+								<input type="text" placeholder="Websites to tell more details? (use '/*/' to separate different urls)" class="form-control" name="time" id="time">
+							</div>
+							
+							<div class="form-group">
+								<textarea rows="6" placeholder="Describe it in details" class="form-control" name="describe" id="describe"></textarea>	
+							</div>
+							
+							<div id="mail-success" class="success">
+								Cheers! We are on the Way :)
+							</div>
+							
+							<div id="mail-fail" class="error">
+								Sorry, don't know what happened. Try later :(
+							</div>
+							
+							<div id="cf-submit">
+								<input type="submit" id="contact-submit" class="btn btn-transparent" value="Submit">
+							</div>						
+							
+						</form>
+					</div>
+					<!-- ./End Contact Form -->
+				
+				</div> <!-- end row -->
+			</div> <!-- end container -->
+			
+			<!-- Google Map -->
+			<div class="google-map wow fadeInDown" data-wow-duration="500ms">
+				<div id="map-canvas"></div>
+			</div>	
+			<!-- /Google Map -->
+			
+		</section> <!-- end section -->
+		
+		<!-- end Add-together Area
+		========================================== -->
+		
+		<!-- Start Team Skills
+		=========================================== -->
+		
+		<section id="team-skills" class="parallax-section">
+			<div class="container">
+				<div class="row wow fadeInDown" data-wow-duration="500ms">
+				
+					<!-- section title -->
+					<div class="title text-center">
+						<h2>Our <span class="color">Skills</span></h2>
+						<div class="border"></div>
+					</div>
+					<!-- /section title -->
+					
+					<!-- skill set -->
+					<div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="500ms">
+						<div class="skill-chart text-center">
+							<span class="chart" data-percent="80">
+								<span class="percent"></span>
+							</span>
+							<h3><i class="fa fa-wordpress"></i> Wordpress</h3>
+							<p>Lorem ipsum has erroribus design color vituper bonorum depend you usedcom.bonorum dependan be used.</p>
+						</div>
+					</div>
+					<!-- end skill set -->
+					
+					<!-- skill set -->
+					<div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="200ms">
+						<div class="skill-chart text-center">
+							<span class="chart" data-percent="90">
+								<span class="percent">86</span>
+							</span>
+							<h3><i class="fa fa-html5"></i> HTML 5</h3>
+							<p>Lorem ipsum has erroribus design color vituper bonorum depend you usedcom.bonorum dependan be used.</p>
+						</div>
+					</div>
+					<!-- end skill set -->
+					
+					<!-- skill set -->
+					<div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="400ms">
+						<div class="skill-chart text-center">
+							<span class="chart" data-percent="85">
+								<span class="percent"></span>
+							</span>
+							<h3><i class="fa fa-android"></i> Android</h3>
+							<p>Lorem ipsum has erroribus design color vituper bonorum depend you usedcom.bonorum dependan be used.</p>
+						</div>
+					</div>
+					<!-- end skill set -->
+					
+					<!-- skill set -->
+					<div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="600ms">
+						<div class="skill-chart text-center">
+							<span class="chart" data-percent="70">
+								<span class="percent"></span>
+							</span>
+							<h3><i class="fa fa-apple"></i> IOS</h3>
+							<p>Lorem ipsum has erroribus design color vituper bonorum depend you usedcom.bonorum dependan be used.</p>
+						</div>
+					</div>
+					<!-- end skill set -->
+					
+				</div>  		<!-- End row -->
+			</div>   	<!-- End container -->
+		</section>   <!-- End section -->
+		
+		<!-- Start Our Team
+		=========================================== -->
+		
+		<section id="tools">
+			<div class="container">
+				<div class="row">
+				
+					<!-- section title -->
+					<div class="title text-center wow fadeInUp" data-wow-duration="500ms">
+						<h2>Some useful <span class="color">Tools</span></h2>
+						<div class="border"></div>
+					</div>
+					<!-- /section title -->
+					
+					<!-- team member -->
+					<div class="col-md-3 col-sm-6 wow fadeInDown" data-wow-duration="500ms">
+                       <article class="team-mate">
+							<div class="member-photo">
+								<!-- member photo -->
+								<img class="img-responsive" src="/static/img/team/member-1.jpg" alt="We-ARE">
+								<!-- /member photo -->
+								
+								<!-- member social profile -->
+								<div class="mask">
+									<ul class="clearfix">
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+									</ul>
+								</div>
+								<!-- /member social profile -->
+							</div>
+							
+							<!-- member name & designation -->
+							<div class="member-title">
+								<h3>Abul Mal Muhit</h3>
+								<span>CEO/Founder</span>
+							</div>
+							<!-- /member name & designation -->
+							
+							<!-- about member -->
+                           <div class="member-info">
+                               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur necessitatibus ullam, culpa odio.</p>
+                           </div>
+						   <!-- /about member -->
+						   
+                       </article>
+                    </div>
+					<!-- end team member -->
+					
+					<!-- team member -->
+					<div class="col-md-3 col-sm-6 wow fadeInDown" data-wow-duration="500ms" data-wow-delay="200ms">
+                       <article class="team-mate">
+							<div class="member-photo">
+								<!-- member photo -->
+								<img class="img-responsive" src="/static/img/team/member-1.jpg" alt="We-ARE">
+								<!-- /member photo -->
+								
+								<!-- member social profile -->
+								<div class="mask">
+									<ul class="clearfix">
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+									</ul>
+								</div>
+								<!-- /member social profile -->
+							</div>
+							
+							<!-- member name & designation -->
+							<div class="member-title">
+								<h3>Frank Miller</h3>
+								<span>Manager</span>
+							</div>
+							<!-- /member name & designation -->
+							
+							<!-- about member -->
+                           <div class="member-info">
+                               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur necessitatibus ullam, culpa odio.</p>
+                           </div>
+						   <!-- /about member -->
+						</article>
+                    </div>
+					<!-- end team member -->
+					
+					<!-- team member -->
+					<div class="col-md-3 col-sm-6 wow fadeInDown" data-wow-duration="500ms" data-wow-delay="400ms">
+                       <article class="team-mate">
+							<div class="member-photo">
+								<!-- member photo -->
+								<img class="img-responsive" src="/static/img/team/member-1.jpg" alt="We-ARE">
+								<!-- /member photo -->
+								
+								<!-- member social profile -->
+								<div class="mask">
+									<ul class="clearfix">
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+									</ul>
+								</div>
+								<!-- /member social profile -->
+							</div>
+							
+							<!-- member name & designation -->
+							<div class="member-title">
+								<h3>Michael Jonson</h3>
+								<span>Web Developer</span>
+							</div>
+							<!-- /member name & designation -->
+							
+							<!-- about member -->
+                           <div class="member-info">
+                               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur necessitatibus ullam, culpa odio.</p>
+                           </div>
+						   <!-- /about member -->
+                       </article>
+                    </div>
+					<!-- end team member -->
+					
+					<!-- team member -->
+					<div class="col-md-3 col-sm-6 wow fadeInDown" data-wow-duration="500ms" data-wow-delay="600ms">
+                       <article class="team-mate kill-margin-bottom">
+							<div class="member-photo">
+								<!-- member photo -->
+								<img class="img-responsive" src="/static/img/team/member-1.jpg" alt="We-ARE">
+								<!-- /member photo -->
+								
+								<!-- member social profile -->
+								<div class="mask">
+									<ul class="clearfix">
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+									</ul>
+								</div>
+								<!-- /member social profile -->
+							</div>
+							
+							<!-- member name & designation -->
+							<div class="member-title">
+								<h3>Mo. Kha. Alamgir</h3>
+								<span>SEO Specialist</span>
+							</div>
+							<!-- /member name & designation -->
+							
+							<!-- about member -->
+                           <div class="member-info">
+                               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur necessitatibus ullam, culpa odio.</p>
+                           </div>
+						   <!-- /about member -->
+                       </article>
+                    </div>
+					<!-- end team member -->
+					
+				</div>  	<!-- End row -->
+			</div>   	<!-- End container -->
+		</section>   <!-- End section -->
+		
+		
+		<!-- Start Twitter Feed
+		=========================================== -->
+		
+		<section id="twitter-feed" class="parallax-section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 text-center">
+					
+						<!-- twitter bird -->
+						<div class="twitter-bird wow fadeInDown" data-wow-duration="500ms">
+							<span>
+								<i class="fa fa-twitter fa-4x"></i>
+							</span>
+						</div>
+						<!-- /twitter bird -->
+						
+						<!-- fetching tweet -->
+						<div class="tweet wow fadeIn" data-wow-duration="2000ms"></div>
+						<!-- /fetching tweet -->
+						
+						<!-- follow us button -->
+						<a href="" title="Follow Us" target="_blank" class="btn btn-transparent wow fadeInUp" data-wow-duration="500ms">Follow Us</a>						
+						<!-- /follow us button -->
+						
+					</div>
+				</div>       <!-- End row -->
+			</div>   	<!-- End container -->
+		</section>   <!-- End section -->
+		
+		<!-- Start Pricing section
+		=========================================== -->
+		
+		<section id="pricing" class="bg-one">
+			<div class="container">
+				<div class="row">
+					
+					<!-- section title -->
+				    <div class="title text-center wow fadeInDown" data-wow-duration="500ms">
+			        	<h2>Our Greatest<span class="color"> Plans</span></h2>
+				        <div class="border"></div>
+				    </div>
+				    <!-- /section title -->
+					
+					<!-- single pricing table -->
+					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="200ms">
+						<div class="pricing">
+							
+							<!-- plan name & value -->
+							<div class="price-title">
+								<h3>Free</h3>
+								<p>From <strong class="value">$99</strong> month</p>
+							</div>
+							<!-- /plan name & value -->
+							
+							<!-- plan description -->
+							<ul>
+								<li>1GB Disk Space</li>
+								<li>10 Email Account</li>
+								<li>Script Installer</li>
+								<li>1 GB Storage</li>
+								<li>10 GB Bandwidth</li>
+								<li>24/7 Tech Support</li>
+							</ul>
+							<!-- /plan description -->
+							
+							<!-- signup button -->
+							<a class="btn btn-transparent" href="#">Signup</a>
+							<!-- /signup button -->
+							
+						</div>
+					</article>
+					<!-- end single pricing table -->
+					
+					<!-- single pricing table -->
+					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="400ms">
+						<div class="pricing">
+						
+							<!-- plan name & value -->
+							<div class="price-title">
+								<h3>Silver</h3>
+								<p>From <strong class="value">$149</strong> month</p>
+							</div>
+							<!-- /plan name & value -->
+							
+							<!-- plan description -->
+							<ul>
+								<li>1GB Disk Space</li>
+								<li>10 Email Account</li>
+								<li>Script Installer</li>
+								<li>1 GB Storage</li>
+								<li>10 GB Bandwidth</li>
+								<li>24/7 Tech Support</li>
+							</ul>
+							<!-- /plan description -->
+							
+							<!-- signup button -->
+							<a class="btn btn-transparent" href="#">Signup</a>
+							<!-- /signup button -->
+							
+						</div>
+					</article>
+					<!-- end single pricing table -->
+					
+					<!-- single pricing table -->
+					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="600ms">
+						<div class="pricing">
+							
+							<!-- plan name & value -->
+							<div class="price-title">
+								<h3>Gold</h3>
+								<p>From <strong class="value">$199</strong> month</p>
+							</div>
+							<!-- /plan name & value -->
+							
+							<!-- plan description -->
+							<ul>
+								<li>1GB Disk Space</li>
+								<li>10 Email Account</li>
+								<li>Script Installer</li>
+								<li>1 GB Storage</li>
+								<li>10 GB Bandwidth</li>
+								<li>24/7 Tech Support</li>
+							</ul>
+							<!-- /plan description -->
+							
+							<!-- signup button -->
+							<a class="btn btn-transparent" href="#">Signup</a>
+							<!-- /signup button -->
+							
+						</div>
+					</article>
+					<!-- end single pricing table -->
+					
+					<!-- single pricing table -->
+					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="750ms">
+						<div class="pricing kill-margin-bottom">
+						
+							<!-- plan name & value -->
+							<div class="price-title">
+								<h3>Platinum</h3>
+								<p>From <strong class="value">$299</strong> month</p>
+							</div>
+							<!-- /plan name & value -->
+							
+							<!-- plan description -->
+							<ul>
+								<li>1GB Disk Space</li>
+								<li>10 Email Account</li>
+								<li>Script Installer</li>
+								<li>1 GB Storage</li>
+								<li>10 GB Bandwidth</li>
+								<li>24/7 Tech Support</li>
+							</ul>
+							<!-- /plan description -->
+							
+							<!-- signup button -->
+							<a class="btn btn-transparent" href="#">Signup</a>
+							<!-- /signup button -->
+							
+						</div>
+					</article>
+					<!-- end single pricing table -->
+				    
+					
+				</div>       <!-- End row -->
+			</div>   	<!-- End container -->
+		</section>   <!-- End section -->
+		
+		
+		<!-- Start Testimonial
+		=========================================== -->
+		
+		<section id="testimonial" class="parallax-section">
+			<div class="container">
+				<div class="row">				
+					<div class="col-lg-12">
+					
+						<!-- section title -->
+						<div class="sub-title text-center wow fadeInDown" data-wow-duration="500ms">
+							<h3>What People Say About Us</h3>
+						</div>
+						<!-- /section title -->
+
+						<!-- testimonial wrapper -->
+						<div id="testimonials" class="wow fadeInUp" data-wow-duration="500ms" data-wow-delay="100ms">
+						
+							<!-- testimonial single -->
+							<div class="item text-center">
+								
+								<!-- client photo -->
+								<div class="client-thumb">
+									<img src="/static/img/team/client.jpg" class="img-responsive" alt="We-ARE">
+								</div>
+								<!-- /client photo -->
+								
+								<!-- client info -->
+								<div class="client-info">
+									<div class="client-meta">
+										<h3>Abul Mal Muhit</h3>
+										<span>Dec 26, 2017</span>
+									</div>
+									<div class="client-comment">
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, ex, cupiditate, error, suscipit saepe sed ea consequuntur inventore sequi sit illo.</p>
+										<ul class="social-profile">
+											<li><a href="#"><i class="fa fa-facebook-square fa-lg"></i></a></li>
+											<li><a href="#"><i class="fa fa-twitter-square fa-lg"></i></a></li>
+											<li><a href="#"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
+										</ul>
+									</div>
+								</div>
+								<!-- /client info -->
+							</div>
+							<!-- /testimonial single -->
+						
+							<!-- testimonial single -->
+							<div class="item text-center">
+								
+								<!-- client photo -->
+								<div class="client-thumb">
+									<img src="/static/img/team/client.jpg" class="img-responsive" alt="We-ARE">
+								</div>
+								<!-- /client photo -->
+								
+								<!-- client info -->
+								<div class="client-info">
+									<div class="client-meta">
+										<h3>Abul Mal Muhit</h3>
+										<span>Dec 26, 2017</span>
+									</div>
+									<div class="client-comment">
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, ex, cupiditate, error, suscipit saepe sed ea consequuntur inventore sequi sit illo.</p>
+										<ul class="social-profile">
+											<li><a href="#"><i class="fa fa-facebook-square fa-lg"></i></a></li>
+											<li><a href="#"><i class="fa fa-twitter-square fa-lg"></i></a></li>
+											<li><a href="#"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
+										</ul>
+									</div>
+								</div>
+								<!-- /client info -->
+							</div>
+							<!-- /testimonial single -->
+						
+							<!-- testimonial single -->
+							<div class="item text-center">
+								
+								<!-- client photo -->
+								<div class="client-thumb">
+									<img src="/static/img/team/client.jpg" class="img-responsive" alt="We-ARE">
+								</div>
+								<!-- /client photo -->
+								
+								<!-- client info -->
+								<div class="client-info">
+									<div class="client-meta">
+										<h3>Abul Mal Muhit</h3>
+										<span>Dec 26, 2017</span>
+									</div>
+									<div class="client-comment">
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, ex, cupiditate, error, suscipit saepe sed ea consequuntur inventore sequi sit illo.</p>
+										<ul class="social-profile">
+											<li><a href="#"><i class="fa fa-facebook-square fa-lg"></i></a></li>
+											<li><a href="#"><i class="fa fa-twitter-square fa-lg"></i></a></li>
+											<li><a href="#"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
+										</ul>
+									</div>
+								</div>
+								<!-- /client info -->
+							</div>
+							<!-- /testimonial single -->
+							
+						</div>		<!-- end testimonial wrapper -->
+					</div> 		<!-- end col lg 12 -->
+				</div>	    <!-- End row -->
+			</div>       <!-- End container -->
+		</section>    <!-- End Section -->
+		
+		<footer id="footer" class="bg-one">
+			<div class="container">
+			    <div class="row wow fadeInUp" data-wow-duration="500ms">
+					<div class="col-lg-12">
+						
+						<!-- Footer Social Links -->
+						<div class="social-icon">
+							<ul>
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
+								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+								<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+								<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+							</ul>
+						</div>
+						<!--/. End Footer Social Links -->
+
+						<!-- copyright -->
+						<div class="copyright text-center">
+							<a href="index.html">
+								<img src="/static/img/logo-we.png" alt="We ARE" /> 
+							</a>
+							<br />
+						</div>
+						<!-- /copyright -->
+						
+					</div> <!-- end col lg 12 -->
+				</div> <!-- end row -->
+			</div> <!-- end container -->
+		</footer> <!-- end footer -->
+		
+		<!-- Back to Top
+		============================== -->
+		<a href="javascript:;" id="scrollUp">
+			<i class="fa fa-angle-up fa-2x"></i>
+		</a>
+		
+		<!-- end Footer Area
+		========================================== -->
+		
+		<!-- 
+		Essential Scripts
+		=====================================-->
+		
+		<!-- Main jQuery -->
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<!-- Bootstrap 3.1 -->
+		<script src="/static/js/bootstrap.min.js"></script>
+		<!-- Slitslider -->
+		<script src="/static/js/jquery.slitslider.js"></script>
+		<script src="/static/js/jquery.ba-cond.min.js"></script>
+		<!-- Parallax -->
+		<script src="/static/js/jquery.parallax-1.1.3.js"></script>
+		<!-- Owl Carousel -->
+		<script src="/static/js/owl.carousel.min.js"></script>
+		<!-- Portfolio Filtering -->
+		<script src="/static/js/jquery.mixitup.min.js"></script>
+		<!-- Custom Scrollbar -->
+		<script src="/static/js/jquery.nicescroll.min.js"></script>
+		<!-- Jappear js -->
+		<script src="/static/js/jquery.appear.js"></script>
+		<!-- Pie Chart -->
+		<script src="/static/js/easyPieChart.js"></script>
+		<!-- jQuery Easing -->
+		<script src="/static/js/jquery.easing-1.3.pack.js"></script>
+		<!-- tweetie.min -->
+		<script src="/static/js/tweetie.min.js"></script>
+
+		<!-- Highlight menu item -->
+		<script src="/static/js/jquery.nav.js"></script>
+		<!-- Sticky Nav -->
+		<script src="/static/js/jquery.sticky.js"></script>
+		<!-- Number Counter Script -->
+		<script src="/static/js/jquery.countTo.js"></script>
+		<!-- wow.min Script -->
+		<script src="/static/js/wow.min.js"></script>
+		<!-- For video responsive -->
+		<script src="/static/js/jquery.fitvids.js"></script>
+		<!-- Grid js -->
+		<script src="/static/js/grid.js"></script>
+		<!-- Custom js -->
+		<script src="/static/js/custom.js"></script>
+
+        <!-- Table Editable plugin-->
+        
+        <script src="/static/js/jquery.tabledit.js"></script>
+
+        <!-- Table editable init-->
+        <script src="/static/js/tabledit.init.js"></script>
+		
+
+    </body>
+</html>
