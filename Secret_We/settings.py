@@ -132,3 +132,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_CHARSET = "UTF-8"
 APPEND_SLASH = False
+
+ALLOWED_HOSTS = ["xn--qoqz7c.xn--6qq986b3xl", "we-are.org.cn"]
