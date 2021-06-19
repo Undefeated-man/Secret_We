@@ -18,6 +18,6 @@ from . import views
 
 urlpatterns = [
     path('', views.goals, name='goals'),
-    path(r'<str:uid>/', views.goals, name='goals'),
-    path(r'<str:uid>', views.goals, name='goals'),
+    path(r'together', views.together, name='together'),
+    path(r'together/', views.together, name='together'),
 ]

@@ -28,7 +28,7 @@ def login(request):
 
             if d:
                 if d.password == password:
-                    req = redirect("/home/"+uid)
+                    req = redirect("/home/")
                     req.set_signed_cookie(key="isLogin", value=uid, max_age=60*30, salt="20200809")
                     return req
             else:
@@ -53,6 +53,14 @@ def register(request):
         if not uid.split("@")[-1] in email_tail:
             return render(request, "re_register.html")
 
+        try:
+            # We use register page to edit user's info
+            user = LoginUser.objects.get(email=uid)
+            user.name = name
+            user.password = password
+        except:
+            if len(LoginUser.objects.all()) >= 3:
+                return render(request, "404.html")
         # print(uid, name, password)
 
         user = LoginUser(email=uid, name=name, password=password)

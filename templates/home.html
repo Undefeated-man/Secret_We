@@ -6,6 +6,7 @@
     <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="description" content="We-ARE One page parallax responsive HTML Template ">
+		<meta http-equiv="refresh" content="900;url=/home/">
         
         <meta name="author" content="Muhammad Morshed">
 		
@@ -61,18 +62,17 @@
 				});
 				
 				$.ajax({
-						url:"/home/done/",
+						url:"/home/together/",
 						data:{
 							"id": id,
 							},
 						type:"POST",
 						success:function (data) {
-							window.location.href = 'http://127.0.0.1:8000/home/done/';
+							window.location.href = '/home/';
 						}
 				})
 			}
 		</script>
-	
     </head>
 	
     <body id="body">
@@ -172,7 +172,7 @@
                         <li><a href="#goal" style="font-size:150%; margin-top:8px;">Semester goals</a></li>
                         <li><a href="#do-together" style="font-size:150%; margin-top:8px;">Do together</a></li>
                         <li><a href="#tools" style="font-size:150%; margin-top:8px;">Tools</a></li>
-                        <li><a href="#pricing" style="font-size:150%; margin-top:8px;">Pricing</a></li>
+						<li><a href="/login/logout/" style="font-size:150%; margin-top:8px;">Log Out</a></li>
                     </ul>
                 </nav>
 				<!-- /main nav -->
@@ -259,27 +259,33 @@
 												</tr>
 											</thead>                                           
 											<tbody>
+												{% for gid, num, life, study, interest in data %}
 												<tr>
 													<td>{{gid}}</td>
-													<td>1</td>
-													<td>{{life}}</td>
-													<td>{{study}}</td>
-													<td>{{interest}}</td>
+													<td>{{num}}</td>
+													<td>
+														{% if life != None %}
+															{{life}}
+														{% else %}
+															{{null}}
+														{% endif %}
+													</td>
+													<td>
+														{% if study != None %}
+															{{study}}
+														{% else %}
+															{{null}}
+														{% endif %}
+													</td>
+													<td>
+														{% if interest != None %}
+															{{interest}}
+														{% else %}
+															{{null}}
+														{% endif %}
+													</td>
 												</tr>
-												<tr>
-													<td>{{gid}}</td>
-													<td>2</td>
-													<td>{{life}}</td>
-													<td>{{study}}</td>
-													<td>{{interest}}</td>
-												</tr>
-												<tr>
-													<td>{{gid}}</td>
-													<td>3</td>
-													<td>{{life}}</td>
-													<td>{{study}}</td>
-													<td>{{interest}}</td>
-												</tr>
+												{% endfor %}
 											</tbody>
 										{% csrf_token %}
 										</table>
@@ -309,27 +315,33 @@
 												</tr>
 											</thead>                                           
 											<tbody>
+												{% for gid, num, life, study, interest in other_data %}
 												<tr>
 													<td>{{gid}}</td>
-													<td>1</td>
-													<td>{{life}}</td>
-													<td>{{study}}</td>
-													<td>{{interest}}</td>
+													<td>{{num}}</td>
+													<td>
+														{% if life != None %}
+															{{life}}
+														{% else %}
+															{{null}}
+														{% endif %}
+													</td>
+													<td>
+														{% if study != None %}
+															{{study}}
+														{% else %}
+															{{null}}
+														{% endif %}
+													</td>
+													<td>
+														{% if interest != None %}
+															{{interest}}
+														{% else %}
+															{{null}}
+														{% endif %}
+													</td>
 												</tr>
-												<tr>
-													<td>{{gid}}</td>
-													<td>2</td>
-													<td>{{life}}</td>
-													<td>{{study}}</td>
-													<td>{{interest}}</td>
-												</tr>
-												<tr>
-													<td>{{gid}}</td>
-													<td>3</td>
-													<td>{{life}}</td>
-													<td>{{study}}</td>
-													<td>{{interest}}</td>
-												</tr>
+												{% endfor %}
 											</tbody>
 										{% csrf_token %}
 										</table>
@@ -430,59 +442,21 @@
                 <ul id="og-grid" class="og-grid">
 				
 					<!-- single portfolio item -->	
-					<li class="mix book">
-						<a href="javascript:done('{{id}}')" data-largesrc="img/portfolio/portx1.jpg" data-title="《1Q84》" data-description="A novel written by Japanese writer Haruki Murakam." id="{{id}}">
-							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
-							<div class="hover-mask">
-								<h3>《1Q84》</h3>
-								<span>
-									<i class="fa fa-plus fa-2x"></i>
-								</span>
-							</div>
-						</a>
-					</li>
-					<!-- /single portfolio item -->
-					
-					<!-- single portfolio item -->
-					<li class="mix film">
-						<a href="javascript:void(0)" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="《无问西东》" data-description="暂时想不到其他想看的，你想留着跟妈看的话。后面你再想一个吧。">
-							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
-							<div class="hover-mask">
-								<h3>《无问西东》</h3>
-								<span>
-									<i class="fa fa-plus fa-2x"></i>
-								</span>
-							</div>
-						</a>
-					</li>
-					<!-- /single portfolio item -->
-					
-					<!-- single portfolio item -->
-					<li class="mix place">
-						<a href="javascript:void(0)" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="上海迪士尼" data-description="等疫情结束，过去上海找你，再一起过去!">
-							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
-							<div class="hover-mask">
-								<h3>上海迪士尼</h3>
-								<span>
-									<i class="fa fa-plus fa-2x"></i>
-								</span>
-							</div>
-						</a>
-					</li>
-					<!-- /single portfolio item -->
-					
-					<!-- single portfolio item -->
-					<li class="mix others">
-						<a href="javascript:void(0)" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="Swimming" data-description="Go swimming in the summer vacation.">
-							<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
-							<div class="hover-mask">
-								<h3>Swimming</h3>
-								<span>
-									<i class="fa fa-plus fa-2x"></i>
-								</span>
-							</div>
-						</a>
-					</li>
+					{% for tid, type, name, des, done in together %}
+						{% if done == 0 %}
+						<li class="mix {{type}}">
+							<a href="javascript:done('{{tid}}')" data-largesrc="/static/img/portfolio/portx1.jpg" data-title="{{name}}" data-description="{{des}}" id="{{tid}}">
+								<img src="/static/img/portfolio/portx1.jpg" alt="We-ARE">
+								<div class="hover-mask">
+									<h3>{{name}}</h3>
+									<span>
+										<i class="fa fa-plus fa-2x"></i>
+									</span>
+								</div>
+							</a>
+						</li>
+						{% endif %}
+					{% endfor %}
 					<!-- /single portfolio item -->
 					
 				</ul> <!-- end og grid -->
@@ -533,7 +507,7 @@
 						
 					<!-- Contact Form -->
 					<div class="contact-form col-md-6 wow fadeInUp" data-wow-duration="500ms" data-wow-delay="300ms">
-						<form id="contact-form" method="post" action="sendmail.php" role="form">
+						<form id="contact-form" method="post" action="/home/together/" role="form">
 							<div class="form-group">
 								<select class="form-control" id="status-select" name="type">
 									<option selected="" value="book" style="background:rgb(43,44,48); color:rgb(255,255,255); font-size:120%">Book</option>
@@ -545,14 +519,6 @@
 							
 							<div class="form-group">
 								<input type="text" placeholder="Things your wanna add to do together" class="form-control" name="name" id="name">
-							</div>
-							
-							<div class="form-group">
-								<input type="text" placeholder="When do you wanna do it?" class="form-control" name="time" id="time">
-							</div>
-							
-							<div class="form-group">
-								<input type="text" placeholder="Websites to tell more details? (use '/*/' to separate different urls)" class="form-control" name="time" id="time">
 							</div>
 							
 							<div class="form-group">
@@ -570,7 +536,7 @@
 							<div id="cf-submit">
 								<input type="submit" id="contact-submit" class="btn btn-transparent" value="Submit">
 							</div>						
-							
+							{% csrf_token %}
 						</form>
 					</div>
 					<!-- ./End Contact Form -->
@@ -598,7 +564,7 @@
 				
 					<!-- section title -->
 					<div class="title text-center">
-						<h2>Our <span class="color">Skills</span></h2>
+						<h2>Here prepare to put some <span class="color">Data Visualization</span></h2>
 						<div class="border"></div>
 					</div>
 					<!-- /section title -->
@@ -818,176 +784,6 @@
 			</div>   	<!-- End container -->
 		</section>   <!-- End section -->
 		
-		
-		<!-- Start Twitter Feed
-		=========================================== -->
-		
-		<section id="twitter-feed" class="parallax-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 text-center">
-					
-						<!-- twitter bird -->
-						<div class="twitter-bird wow fadeInDown" data-wow-duration="500ms">
-							<span>
-								<i class="fa fa-twitter fa-4x"></i>
-							</span>
-						</div>
-						<!-- /twitter bird -->
-						
-						<!-- fetching tweet -->
-						<div class="tweet wow fadeIn" data-wow-duration="2000ms"></div>
-						<!-- /fetching tweet -->
-						
-						<!-- follow us button -->
-						<a href="" title="Follow Us" target="_blank" class="btn btn-transparent wow fadeInUp" data-wow-duration="500ms">Follow Us</a>						
-						<!-- /follow us button -->
-						
-					</div>
-				</div>       <!-- End row -->
-			</div>   	<!-- End container -->
-		</section>   <!-- End section -->
-		
-		<!-- Start Pricing section
-		=========================================== -->
-		
-		<section id="pricing" class="bg-one">
-			<div class="container">
-				<div class="row">
-					
-					<!-- section title -->
-				    <div class="title text-center wow fadeInDown" data-wow-duration="500ms">
-			        	<h2>Our Greatest<span class="color"> Plans</span></h2>
-				        <div class="border"></div>
-				    </div>
-				    <!-- /section title -->
-					
-					<!-- single pricing table -->
-					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="200ms">
-						<div class="pricing">
-							
-							<!-- plan name & value -->
-							<div class="price-title">
-								<h3>Free</h3>
-								<p>From <strong class="value">$99</strong> month</p>
-							</div>
-							<!-- /plan name & value -->
-							
-							<!-- plan description -->
-							<ul>
-								<li>1GB Disk Space</li>
-								<li>10 Email Account</li>
-								<li>Script Installer</li>
-								<li>1 GB Storage</li>
-								<li>10 GB Bandwidth</li>
-								<li>24/7 Tech Support</li>
-							</ul>
-							<!-- /plan description -->
-							
-							<!-- signup button -->
-							<a class="btn btn-transparent" href="#">Signup</a>
-							<!-- /signup button -->
-							
-						</div>
-					</article>
-					<!-- end single pricing table -->
-					
-					<!-- single pricing table -->
-					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="400ms">
-						<div class="pricing">
-						
-							<!-- plan name & value -->
-							<div class="price-title">
-								<h3>Silver</h3>
-								<p>From <strong class="value">$149</strong> month</p>
-							</div>
-							<!-- /plan name & value -->
-							
-							<!-- plan description -->
-							<ul>
-								<li>1GB Disk Space</li>
-								<li>10 Email Account</li>
-								<li>Script Installer</li>
-								<li>1 GB Storage</li>
-								<li>10 GB Bandwidth</li>
-								<li>24/7 Tech Support</li>
-							</ul>
-							<!-- /plan description -->
-							
-							<!-- signup button -->
-							<a class="btn btn-transparent" href="#">Signup</a>
-							<!-- /signup button -->
-							
-						</div>
-					</article>
-					<!-- end single pricing table -->
-					
-					<!-- single pricing table -->
-					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="600ms">
-						<div class="pricing">
-							
-							<!-- plan name & value -->
-							<div class="price-title">
-								<h3>Gold</h3>
-								<p>From <strong class="value">$199</strong> month</p>
-							</div>
-							<!-- /plan name & value -->
-							
-							<!-- plan description -->
-							<ul>
-								<li>1GB Disk Space</li>
-								<li>10 Email Account</li>
-								<li>Script Installer</li>
-								<li>1 GB Storage</li>
-								<li>10 GB Bandwidth</li>
-								<li>24/7 Tech Support</li>
-							</ul>
-							<!-- /plan description -->
-							
-							<!-- signup button -->
-							<a class="btn btn-transparent" href="#">Signup</a>
-							<!-- /signup button -->
-							
-						</div>
-					</article>
-					<!-- end single pricing table -->
-					
-					<!-- single pricing table -->
-					<article class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="750ms">
-						<div class="pricing kill-margin-bottom">
-						
-							<!-- plan name & value -->
-							<div class="price-title">
-								<h3>Platinum</h3>
-								<p>From <strong class="value">$299</strong> month</p>
-							</div>
-							<!-- /plan name & value -->
-							
-							<!-- plan description -->
-							<ul>
-								<li>1GB Disk Space</li>
-								<li>10 Email Account</li>
-								<li>Script Installer</li>
-								<li>1 GB Storage</li>
-								<li>10 GB Bandwidth</li>
-								<li>24/7 Tech Support</li>
-							</ul>
-							<!-- /plan description -->
-							
-							<!-- signup button -->
-							<a class="btn btn-transparent" href="#">Signup</a>
-							<!-- /signup button -->
-							
-						</div>
-					</article>
-					<!-- end single pricing table -->
-				    
-					
-				</div>       <!-- End row -->
-			</div>   	<!-- End container -->
-		</section>   <!-- End section -->
-		
-		
 		<!-- Start Testimonial
 		=========================================== -->
 		
@@ -998,7 +794,7 @@
 					
 						<!-- section title -->
 						<div class="sub-title text-center wow fadeInDown" data-wow-duration="500ms">
-							<h3>What People Say About Us</h3>
+							<h3>OUR Stories are <span class="color">still going on</span>...</h3>
 						</div>
 						<!-- /section title -->
 
@@ -1017,11 +813,11 @@
 								<!-- client info -->
 								<div class="client-info">
 									<div class="client-meta">
-										<h3>Abul Mal Muhit</h3>
-										<span>Dec 26, 2017</span>
+										<h3>Artemis & Vincent</h3>
+										<span>Aug 9, 2020</span>
 									</div>
 									<div class="client-comment">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, ex, cupiditate, error, suscipit saepe sed ea consequuntur inventore sequi sit illo.</p>
+										<p>In this special day, we came together.</p>
 										<ul class="social-profile">
 											<li><a href="#"><i class="fa fa-facebook-square fa-lg"></i></a></li>
 											<li><a href="#"><i class="fa fa-twitter-square fa-lg"></i></a></li>
@@ -1045,11 +841,11 @@
 								<!-- client info -->
 								<div class="client-info">
 									<div class="client-meta">
-										<h3>Abul Mal Muhit</h3>
-										<span>Dec 26, 2017</span>
+										<h3>First kiss</h3>
+										<span>Feb 8, 2021</span>
 									</div>
 									<div class="client-comment">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, ex, cupiditate, error, suscipit saepe sed ea consequuntur inventore sequi sit illo.</p>
+										<p>.</p>
 										<ul class="social-profile">
 											<li><a href="#"><i class="fa fa-facebook-square fa-lg"></i></a></li>
 											<li><a href="#"><i class="fa fa-twitter-square fa-lg"></i></a></li>
@@ -1061,33 +857,6 @@
 							</div>
 							<!-- /testimonial single -->
 						
-							<!-- testimonial single -->
-							<div class="item text-center">
-								
-								<!-- client photo -->
-								<div class="client-thumb">
-									<img src="/static/img/team/client.jpg" class="img-responsive" alt="We-ARE">
-								</div>
-								<!-- /client photo -->
-								
-								<!-- client info -->
-								<div class="client-info">
-									<div class="client-meta">
-										<h3>Abul Mal Muhit</h3>
-										<span>Dec 26, 2017</span>
-									</div>
-									<div class="client-comment">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, ex, cupiditate, error, suscipit saepe sed ea consequuntur inventore sequi sit illo.</p>
-										<ul class="social-profile">
-											<li><a href="#"><i class="fa fa-facebook-square fa-lg"></i></a></li>
-											<li><a href="#"><i class="fa fa-twitter-square fa-lg"></i></a></li>
-											<li><a href="#"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
-										</ul>
-									</div>
-								</div>
-								<!-- /client info -->
-							</div>
-							<!-- /testimonial single -->
 							
 						</div>		<!-- end testimonial wrapper -->
 					</div> 		<!-- end col lg 12 -->
