@@ -134,7 +134,7 @@ def fansy_bar(df, title=""):
         if len(col_name) == 1:
             page.add(
                 Bar()
-                .add_xaxis([df.index[i] for i in range(len(df))])
+                .add_xaxis([str(df.index[i]) for i in range(len(df))])
                 .add_yaxis(y_name, y)
                 .set_global_opts(
                     title_opts=opts.TitleOpts(title=title),
@@ -146,7 +146,7 @@ def fansy_bar(df, title=""):
             y1_name = col_name[-2]
             page.add(
                 Bar()
-                .add_xaxis([df.index[i] for i in range(len(df))])
+                .add_xaxis([str(df.index[i]) for i in range(len(df))])
                 .add_yaxis(y_name, y)
                 .add_yaxis(y1_name, y1)
                 .set_global_opts(
@@ -161,7 +161,7 @@ def fansy_bar(df, title=""):
             y2_name = col_name[-3]
             page.add(
                 Bar()
-                .add_xaxis([df.index[i] for i in range(len(df))])
+                .add_xaxis([str(df.index[i]) for i in range(len(df))])
                 .add_yaxis(y_name, y)
                 .add_yaxis(y1_name, y1)
                 .add_yaxis(y2_name, y2)
@@ -179,7 +179,7 @@ def fansy_bar(df, title=""):
             y3_name = col_name[-4]
             page.add(
                 Bar()
-                .add_xaxis([df.index[i] for i in range(len(df))])
+                .add_xaxis([str(df.index[i]) for i in range(len(df))])
                 .add_yaxis(y_name, y)
                 .add_yaxis(y1_name, y1)
                 .add_yaxis(y2_name, y2)
