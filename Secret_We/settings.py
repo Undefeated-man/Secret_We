@@ -26,7 +26,7 @@ SECRET_KEY = 'r-ggeq4c!04+km$b3!jt=o!z^vc8)z-w4qcz=watky+5d!85mv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["we-are.org.cn", "伊元.我爱你", "xn--qoqz7c.xn--6qq986b3xl"]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "login",
     "goals",
     "blank",
+    "tools",
 ]
 
 MIDDLEWARE = [

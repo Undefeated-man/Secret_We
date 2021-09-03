@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/11352/Downloads/Bootswatch_%20Cosmo.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Visualization</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/static/Visualization_files/bootstrap.css">
+		<link rel="stylesheet" href="/static/Visualization_files/font-awesome.min.css">
+		<link rel="stylesheet" href="/static/Visualization_files/prism-okaidia.css">
+		<link rel="stylesheet" href="/static/Visualization_files/custom.min.css">
+		<!-- Global Site Tag (gtag.js) - Google Analytics -->
+		<script type="text/javascript" async="" src="/static/Visualization_files/analytics.js"></script><script async="" src="/static/Visualization_files/js"></script>
+	</head>
+	<body data-new-gr-c-s-check-loaded="14.1027.0" data-gr-ext-installed="">
+    <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+      <div class="container">
+        <a href="https://bootswatch.com/" class="navbar-brand">Visualization</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ms-md-auto">
+            <li class="nav-item">
+              <a target="_blank" rel="noopener" class="nav-link" href="file:///C:/login/logout/"> Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>Visual</h1>
+            <p class="lead">An DIY Visual Tool</p>
+          </div>
+          <div class="col-lg-4 col-md-5 col-sm-6">
+          </div>
+        </div>
+      </div>
+	  
+      <!-- Forms
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="bs-component">
+				<form enctype="multipart/form-data" method="post" action="/tools/visual/">
+					<fieldset>
+					  <div class="form-group">
+						<label for="type" class="form-label mt-4">你希望做成什么样的可视化呢？</label>
+						<select class="form-select" id="type" name="type">
+							<option value="bar" selected="bar">Bar Chart</option>
+							<option value="pie">Pie Chart</option>
+							<option value="pair">Pair Plot</option>
+							<option value="line">Line Chart</option>
+							<option value="heatmap">Heatmap</option>
+							<option value="scatter">Scatter Plot</option>
+						</select>
+						</div>
+						<div class="form-group">
+						  <label for="title" class="form-label mt-4">你的可视化标题是：</label>
+						  <input type="text" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter your title" name="title">
+						</div>
+						<div class="form-group">
+							<label for="file" class="form-label mt-4">Please upload your file(only csv is allowed)</label>
+							<input class="form-control" type="file" id="file" accept=".csv" name="file">
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="1" id="flexCheckChecked" name="down">
+							<label class="form-check-label" for="flexCheckChecked">
+							  是否下载（若不选，则为在线浏览）
+							</label>
+						</div>
+						<hr />
+						<button type="submit" class="btn btn-primary">Submit</button>
+						{% csrf_token %}
+					</fieldset>
+				</form>
+			</div>
+        </div>
+      </div>
+
+      
+
+      <!-- Indicators
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="bs-component">
+              <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <h4 class="alert-heading">Note</h4>
+                <p class="mb-0">若这个不够用，就找元，她会找我的~</p>
+              </div>
+          </div>
+        </div>
+
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-end"><a href="https://bootswatch.com/cosmo/#top">Back to top</a></li>
+            </ul>
+
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/static/Visualization_files/jquery.min.js"></script>
+    <script src="/static/Visualization_files/bootstrap.bundle.min.js"></script>
+    <script src="/static/Visualization_files/prism.js" data-manual=""></script>
+    <script src="/static/Visualization_files/custom.js"></script>
+  
+
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></div></div></div></body></html>
