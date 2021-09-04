@@ -422,5 +422,5 @@ def fansy_pie(df, title="", subtitle=""):
         return False
 
 
-def example(request):
+def examples(request):
     return render(request, "example.html")
