@@ -24,4 +24,6 @@ urlpatterns = [
     path(r'visual/result/', views.show_result, name='visual_result'),
     path(r'visual/result/download', views.download, name='visual_result'),
     path(r'visual/result/download/', views.download, name='visual_result'),
+    path(r'visual/example', views.examples, name='visual_examples'),
+    path(r'visual/example/', views.examples, name='visual_examples'),
 ]

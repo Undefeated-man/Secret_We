@@ -99,11 +99,11 @@ def visualize(request):
             down = request.POST.get("down", "")
             df = pd.read_csv("demo.csv", index_col=0)
             if type_ == "bar":
-                result = fansy_bar(df, title)
+                result = fansy_bar(df, title, subtitle)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "pie":
-                result = fansy_pie(df, title)
+                result = fansy_pie(df, title, subtitle)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "pair":
@@ -119,7 +119,7 @@ def visualize(request):
                 if down:
                     return download(request, "demo.html")
             elif type_ == "scatter":
-                result = fansy_scatter(df, title)
+                result = fansy_scatter(df, title, subtitle)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "heatmap":
@@ -131,103 +131,42 @@ def visualize(request):
         return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required.")
 
 
-def fansy_bar(df, title=""):
+def fansy_bar(df, title="", subtitle=""):
     try:
         col_name = df.columns
-        y = list(df[col_name[-1]])
-        y_name = col_name[-1]
-        page = Page()
-        if len(col_name) == 1:
-            page.add(
-                Bar()
-                .add_xaxis([str(df.index[i]) for i in range(len(df))])
-                .add_yaxis(y_name, y)
-                .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title),
-                    datazoom_opts=[opts.DataZoomOpts()],
-                )
-            )
-        elif len(col_name) == 2:
-            y1 = list(df[col_name[-2]])
-            y1_name = col_name[-2]
-            page.add(
-                Bar()
-                .add_xaxis([str(df.index[i]) for i in range(len(df))])
-                .add_yaxis(y_name, y)
-                .add_yaxis(y1_name, y1)
-                .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title),
-                    datazoom_opts=[opts.DataZoomOpts()],
-                )
-            )
-        elif len(col_name) == 3:
-            y1 = list(df[col_name[-2]])
-            y1_name = col_name[-2]
-            y2 = list(df[col_name[-3]])
-            y2_name = col_name[-3]
-            page.add(
-                Bar()
-                .add_xaxis([str(df.index[i]) for i in range(len(df))])
-                .add_yaxis(y_name, y)
-                .add_yaxis(y1_name, y1)
-                .add_yaxis(y2_name, y2)
-                .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title),
-                    datazoom_opts=[opts.DataZoomOpts()],
-                )
-            )
-        elif len(col_name) == 4:
-            y1 = list(df[col_name[-2]])
-            y1_name = col_name[-2]
-            y2 = list(df[col_name[-3]])
-            y2_name = col_name[-3]
-            y3 = list(df[col_name[-4]])
-            y3_name = col_name[-4]
-            page.add(
-                Bar()
-                .add_xaxis([str(df.index[i]) for i in range(len(df))])
-                .add_yaxis(y_name, y)
-                .add_yaxis(y1_name, y1)
-                .add_yaxis(y2_name, y2)
-                .add_yaxis(y3_name, y3)
-                .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title),
-                    datazoom_opts=[opts.DataZoomOpts()],
-                )
-            )
-        page.render("./templates/demo.html")
+        b = Bar().add_xaxis([str(df.index[i]) for i in range(len(df))])
+        for i in range(len(col_name)):
+                b.add_yaxis(col_name[i], list(df[col_name[i]]))
+        b.set_global_opts(
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle),
+            datazoom_opts=[opts.DataZoomOpts()],
+        )
+        b.render("./templates/demo.html")
         return True
     except Exception as e:
         print(e)
         return False
 
 
-def fansy_scatter(df, title=""):
+def fansy_scatter(df, title="", subtitle=""):
     try:
         col_name = df.columns
-        if len(col_name) == 1:
-            c = (
-                Scatter()
-                .add_xaxis([str(df.index[i]) for i in range(len(df))])
-                .add_yaxis(col_name[-1], list(df[col_name[-1]]))
-                .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title),
-                    visualmap_opts=opts.VisualMapOpts(),
-                )
-                .render("./templates/demo.html")
-            )
-        elif len(col_name) == 2:
-            c = (
-                Scatter()
-                .add_xaxis([str(df.index[i]) for i in range(len(df))])
-                .add_yaxis(col_name[-1], list(df[col_name[-1]]))
-                .add_yaxis(col_name[-2], list(df[col_name[-2]]))
-                .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title),
-                    visualmap_opts=opts.VisualMapOpts(),
-                )
-                .render("./templates/demo.html")
-            )
+        s = Scatter().add_xaxis([str(df.index[i]) for i in range(len(df))])
+        if len(df) < 20:
+            for i in range(len(col_name)):
+                s.add_yaxis(col_name[i], list(df[col_name[i]]))
+        else:
+            for i in range(len(col_name)):
+                s.add_yaxis(col_name[i], list(df[col_name[i]]), symbol_size=2.5, label_opts=opts.LabelOpts(is_show=False))
+        s.set_global_opts(
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle),
+            #visualmap_opts=opts.VisualMapOpts(),
+            tooltip_opts=opts.TooltipOpts(is_show=True),
+            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True)),
+            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True)),
+            datazoom_opts=[opts.DataZoomOpts()],
+        )
+        s.render("./templates/demo.html")
         return True
     except Exception as e:
         print(e)
@@ -457,7 +396,7 @@ def heatmap(df, title=""):
         return False
 
 
-def fansy_pie(df, title=""):
+def fansy_pie(df, title="", subtitle=""):
     try:    
         col_name = df.columns
         page = Page()
@@ -469,10 +408,10 @@ def fansy_pie(df, title=""):
                 .add(
                     "",
                     [list(z) for z in zip([str(df.index[i]) for i in range(len(df))], y)],
-                    label_opts=opts.LabelOpts(is_show=True, type_ = 'scroll'),
+                    label_opts=opts.LabelOpts(is_show=True),
                 )
                 .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title)
+                    title_opts=opts.TitleOpts(title=title, subtitle=subtitle)
                 )
             )
         page.render("./templates/demo.html")
@@ -481,3 +420,7 @@ def fansy_pie(df, title=""):
     except Exception as e:
         print(e)
         return False
+
+
+def example(request):
+    return render(request, "example.html")
