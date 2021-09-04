@@ -94,6 +94,7 @@ def visualize(request):
                 for chunk in f.chunks():
                     destination.write(chunk)
             title = request.POST.get("title", "")
+            subtitle = request.POST.get("subtitle", "")
             type_ = request.POST.get("type", "")
             down = request.POST.get("down", "")
             df = pd.read_csv("demo.csv", index_col=0)
@@ -113,6 +114,10 @@ def visualize(request):
                 result = fansy_line(df, title)
                 if down:
                     return download(request, "demo.html")
+            elif type_ == "line-sim":
+                result = sim_line(df, title, subtitle)
+                if down:
+                    return download(request, "demo.html")
             elif type_ == "scatter":
                 result = fansy_scatter(df, title)
                 if down:
@@ -123,6 +128,7 @@ def visualize(request):
                     return download(request, name="demo.png")
         if result:
             return redirect("/tools/visual/result")
+        return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required.")
 
 
 def fansy_bar(df, title=""):
@@ -242,6 +248,37 @@ def pairplot(df):
         return False
 
 
+def sim_line(df, title="", subtitle=""):
+    try:
+        col_name = df.columns
+        l = Line().add_xaxis(xaxis_data=[str(df.index[i]) for i in range(len(df))])
+        for i in range(len(col_name)):
+            l.add_yaxis(
+                series_name=col_name[i],
+                y_axis=df[col_name[i]],
+                markpoint_opts=opts.MarkPointOpts(
+                    data=[
+                        opts.MarkPointItem(type_="max", name="max"),
+                        opts.MarkPointItem(type_="min", name="min"),
+                    ]
+                ),
+                markline_opts=opts.MarkLineOpts(
+                    data=[opts.MarkLineItem(type_="average", name="avg")]
+                ),
+            )
+        l.set_global_opts(
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle),
+            tooltip_opts=opts.TooltipOpts(trigger="axis"),
+            toolbox_opts=opts.ToolboxOpts(is_show=True),
+            datazoom_opts=[opts.DataZoomOpts()],
+            xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
+        )
+        l.render("./templates/demo.html")
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
 def fansy_line(df, title=""):
     try:
         col_name = df.columns
@@ -309,7 +346,7 @@ def fansy_line(df, title=""):
                             is_show=True, linestyle_opts=opts.LineStyleOpts(color="#ffffff1f")
                         ),
                     ),
-                    legend_opts=opts.LegendOpts(is_show=False),
+                    legend_opts=opts.LegendOpts(is_show=True, pos_bottom=20, pos_left=10),
                     datazoom_opts=[opts.DataZoomOpts()],
                 )
             )
@@ -384,7 +421,7 @@ def fansy_line(df, title=""):
                             is_show=True, linestyle_opts=opts.LineStyleOpts(color="#ffffff1f")
                         ),
                     ),
-                    legend_opts=opts.LegendOpts(is_show=False),
+                    legend_opts=opts.LegendOpts(is_show=True, pos_bottom=20, pos_left=10),
                     datazoom_opts=[opts.DataZoomOpts()],
                 )
             )
@@ -423,20 +460,21 @@ def heatmap(df, title=""):
 def fansy_pie(df, title=""):
     try:    
         col_name = df.columns
-        y = list(df[col_name[-1]])
-        y_name = col_name[-1]
         page = Page()
-        page.add(
-            Pie()
-            .add(
-                "",
-                [list(z) for z in zip([df.index[i] for i in range(len(df))], y)],
-                label_opts=opts.LabelOpts(is_show=True),
+        for i in range(len(col_name)):
+            y = list(df[col_name[i]])
+            y_name = col_name[i]
+            page.add(
+                Pie()
+                .add(
+                    "",
+                    [list(z) for z in zip([str(df.index[i]) for i in range(len(df))], y)],
+                    label_opts=opts.LabelOpts(is_show=True, type_ = 'scroll'),
+                )
+                .set_global_opts(
+                    title_opts=opts.TitleOpts(title=title)
+                )
             )
-            .set_global_opts(
-                title_opts=opts.TitleOpts(title=title),
-            )
-        )
         page.render("./templates/demo.html")
         
         return True
