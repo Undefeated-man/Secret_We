@@ -99,6 +99,9 @@ def visualize(request):
             subtitle = request.POST.get("subtitle", "")
             type_ = request.POST.get("type", "")
             down = request.POST.get("down", "")
+            x_axis_name = request.POST.get("x_axis_name", "")
+            y_axis_name = request.POST.get("y_axis_name", "")
+            high = request.POST.get("high-level", "")
             df = pd.read_csv("demo.csv", index_col=0)
             if type_ == "bar":
                 result = fansy_bar(df, title, subtitle)
@@ -117,7 +120,7 @@ def visualize(request):
                 if down:
                     return download(request, "demo.html")
             elif type_ == "line-sim":
-                result = sim_line(df, title, subtitle)
+                result = sim_line(df, title, subtitle, x_axis_name, y_axis_name, high)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "scatter":
@@ -130,7 +133,7 @@ def visualize(request):
                     return download(request, name="demo.png")
         if result:
             return redirect("/tools/visual/result")
-        return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required.")
+        return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required(For example: your title).")
 
 
 def fansy_bar(df, title="", subtitle=""):
@@ -142,6 +145,8 @@ def fansy_bar(df, title="", subtitle=""):
         b.set_global_opts(
             title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
             legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
+            xaxis_opts=opts.AxisOpts(name=x_axis_name),
+            yaxis_opts=opts.AxisOpts(name=y_axis_name),
             datazoom_opts=[opts.DataZoomOpts()],
         )
         b.render("./templates/demo.html")
@@ -166,8 +171,8 @@ def fansy_scatter(df, title="", subtitle=""):
             legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
             #visualmap_opts=opts.VisualMapOpts(),
             tooltip_opts=opts.TooltipOpts(is_show=True),
-            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True)),
-            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True)),
+            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), name=x_axis_name),
+            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), name=y_axis_name),
             datazoom_opts=[opts.DataZoomOpts()],
         )
         s.render("./templates/demo.html")
@@ -196,7 +201,7 @@ def pairplot(df):
         return False
 
 
-def sim_line(df, title="", subtitle=""):
+def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high):
     try:
         col_name = df.columns
         l = Line().add_xaxis(xaxis_data=[str(df.index[i]) for i in range(len(df))])
@@ -204,24 +209,34 @@ def sim_line(df, title="", subtitle=""):
             l.add_yaxis(
                 series_name=col_name[i],
                 y_axis=df[col_name[i]],
-                markpoint_opts=opts.MarkPointOpts(
-                    data=[
-                        opts.MarkPointItem(type_="max", name="max"),
-                        opts.MarkPointItem(type_="min", name="min"),
-                    ]
-                ),
-                markline_opts=opts.MarkLineOpts(
-                    data=[opts.MarkLineItem(type_="average", name="avg")]
-                ),
+                #markpoint_opts=opts.MarkPointOpts(
+                #    data=[
+                #        opts.MarkPointItem(type_="max", name="max"),
+                #        opts.MarkPointItem(type_="min", name="min"),
+                #    ]
+                #),
+                #markline_opts=opts.MarkLineOpts(
+                #    data=[opts.MarkLineItem(type_="average", name="avg")]
+                #),
             )
-        l.set_global_opts(
-            title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
-            legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
-            tooltip_opts=opts.TooltipOpts(trigger="axis"),
-            toolbox_opts=opts.ToolboxOpts(is_show=True),
-            datazoom_opts=[opts.DataZoomOpts()],
-            xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
-        )
+        if high:
+            l.set_global_opts(
+                title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+                legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
+                tooltip_opts=opts.TooltipOpts(trigger="axis"),
+                toolbox_opts=opts.ToolboxOpts(is_show=True),
+                datazoom_opts=[opts.DataZoomOpts()],
+                xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False, name=x_axis_name),
+                yaxis_opts=opts.AxisOpts(name=y_axis_name),
+            )
+        else:
+            l.set_global_opts(
+                title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+                legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
+                datazoom_opts=[opts.DataZoomOpts()],
+                xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False, name=x_axis_name),
+                yaxis_opts=opts.AxisOpts(name=y_axis_name),
+            )
         l.render("./templates/demo.html")
         return True
     except Exception as e:
@@ -267,6 +282,7 @@ def fansy_line(df, title=""):
                     ),
                     xaxis_opts=opts.AxisOpts(
                         type_="category",
+                        name=x_axis_name,
                         boundary_gap=False,
                         axislabel_opts=opts.LabelOpts(margin=30, color="#ffffff63"),
                         axisline_opts=opts.AxisLineOpts(is_show=False),
@@ -282,6 +298,7 @@ def fansy_line(df, title=""):
                     yaxis_opts=opts.AxisOpts(
                         type_="value",
                         position="right",
+                        name=y_axis_name,
                         axislabel_opts=opts.LabelOpts(margin=20, color="#ffffff63"),
                         axisline_opts=opts.AxisLineOpts(
                             linestyle_opts=opts.LineStyleOpts(width=2, color="#fff")
@@ -342,6 +359,7 @@ def fansy_line(df, title=""):
                     ),
                     xaxis_opts=opts.AxisOpts(
                         type_="category",
+                        name=x_axis_name,
                         boundary_gap=False,
                         axislabel_opts=opts.LabelOpts(margin=30, color="#ffffff63"),
                         axisline_opts=opts.AxisLineOpts(is_show=False),
@@ -357,6 +375,7 @@ def fansy_line(df, title=""):
                     yaxis_opts=opts.AxisOpts(
                         type_="value",
                         position="right",
+                        name=y_axis_name,
                         axislabel_opts=opts.LabelOpts(margin=20, color="#ffffff63"),
                         axisline_opts=opts.AxisLineOpts(
                             linestyle_opts=opts.LineStyleOpts(width=2, color="#fff")
@@ -396,6 +415,11 @@ def fansy_line(df, title=""):
 
 def heatmap(df, title=""):
     try:
+        # solve the Chinese encoding problem
+        plt.rcParams["font.sans-serif"] = ["simhei"]
+        plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像负号显示为方块问题
+        sns.set(font='simhei', font_scale=1.5)
+        
         corr = df.corr()
         plt.figure(figsize = (15, 10))
         sns.heatmap(corr, cmap='RdBu', linewidths = 0.05).set(title=title)
@@ -423,6 +447,8 @@ def fansy_pie(df, title="", subtitle=""):
                 .set_global_opts(
                     title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
                     legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
+                    xaxis_opts=opts.AxisOpts(name=x_axis_name),
+                    yaxis_opts=opts.AxisOpts(name=y_axis_name),
                 )
             )
         page.render("./templates/demo.html")
