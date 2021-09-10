@@ -2,6 +2,7 @@ import time
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import sys
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, StreamingHttpResponse
@@ -11,6 +12,7 @@ from login.models import LoginUser
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Line, Grid, Page, Pie, Radar, Scatter
 from pyecharts.commons.utils import JsCode
+
 
 # Create your views here.
 class UploadFileForm(forms.Form):
@@ -138,7 +140,8 @@ def fansy_bar(df, title="", subtitle=""):
         for i in range(len(col_name)):
                 b.add_yaxis(col_name[i], list(df[col_name[i]]))
         b.set_global_opts(
-            title_opts=opts.TitleOpts(title=title, subtitle=subtitle),
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+            legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
             datazoom_opts=[opts.DataZoomOpts()],
         )
         b.render("./templates/demo.html")
@@ -159,7 +162,8 @@ def fansy_scatter(df, title="", subtitle=""):
             for i in range(len(col_name)):
                 s.add_yaxis(col_name[i], list(df[col_name[i]]), symbol_size=2.5, label_opts=opts.LabelOpts(is_show=False))
         s.set_global_opts(
-            title_opts=opts.TitleOpts(title=title, subtitle=subtitle),
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+            legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
             #visualmap_opts=opts.VisualMapOpts(),
             tooltip_opts=opts.TooltipOpts(is_show=True),
             xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True)),
@@ -175,6 +179,11 @@ def fansy_scatter(df, title="", subtitle=""):
 
 def pairplot(df):
     try:
+        # solve the Chinese encoding problem
+        plt.rcParams["font.sans-serif"] = ["simhei"]
+        plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像负号显示为方块问题
+        sns.set(font='simhei', font_scale=1.5)
+        
         plt.figure(figsize = (15, 10))
         g = sns.pairplot(pd.DataFrame(df), diag_kind="kde",
                      plot_kws=dict(s=10, alpha=0.6))
@@ -206,7 +215,8 @@ def sim_line(df, title="", subtitle=""):
                 ),
             )
         l.set_global_opts(
-            title_opts=opts.TitleOpts(title=title, subtitle=subtitle),
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+            legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
             tooltip_opts=opts.TooltipOpts(trigger="axis"),
             toolbox_opts=opts.ToolboxOpts(is_show=True),
             datazoom_opts=[opts.DataZoomOpts()],
@@ -411,7 +421,8 @@ def fansy_pie(df, title="", subtitle=""):
                     label_opts=opts.LabelOpts(is_show=True),
                 )
                 .set_global_opts(
-                    title_opts=opts.TitleOpts(title=title, subtitle=subtitle)
+                    title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+                    legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
                 )
             )
         page.render("./templates/demo.html")
