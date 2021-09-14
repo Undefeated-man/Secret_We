@@ -19,7 +19,10 @@ def goals(request, uid=None):
             return redirect('/login/')
     except:
         return redirect('/login/')
-
+    
+    if "visitor" in uid:
+        return render(request, "Visualization.html")
+    
     goal = Goals.objects.filter(uid=uid)
     if request.method == "GET":
         username = LoginUser.objects.get(email=uid).name
@@ -113,6 +116,9 @@ def together(request):
     except:
         return redirect('/login/')
 
+    if "visitor" in uid:
+        return render(request, "Visualization.html")
+    
     tid = request.POST.get("id", "")
     name = request.POST.get("name", "")
     if tid != "":

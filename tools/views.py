@@ -2,15 +2,16 @@ import time
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sys
+import numpy as np
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, StreamingHttpResponse
 from django import forms
 
+from sklearn import decomposition
 from login.models import LoginUser
 from pyecharts import options as opts
-from pyecharts.charts import Bar, Line, Grid, Page, Pie, Radar, Scatter
+from pyecharts.charts import Bar, Line, Grid, Page, Pie, Radar, Scatter, Boxplot
 from pyecharts.commons.utils import JsCode
 
 
@@ -104,11 +105,11 @@ def visualize(request):
             high = request.POST.get("high-level", "")
             df = pd.read_csv("demo.csv", index_col=0)
             if type_ == "bar":
-                result = fansy_bar(df, title, subtitle)
+                result = fansy_bar(df, title, subtitle, x_axis_name, y_axis_name)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "pie":
-                result = fansy_pie(df, title, subtitle)
+                result = fansy_pie(df, title, subtitle, x_axis_name, y_axis_name)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "pair":
@@ -116,7 +117,7 @@ def visualize(request):
                 if result:
                     return download(request, name="demo.png")
             elif type_ == "line":
-                result = fansy_line(df, title)
+                result = fansy_line(df, title, x_axis_name, y_axis_name)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "line-sim":
@@ -124,19 +125,132 @@ def visualize(request):
                 if down:
                     return download(request, "demo.html")
             elif type_ == "scatter":
-                result = fansy_scatter(df, title, subtitle)
+                result = fansy_scatter(df, title, subtitle, x_axis_name, y_axis_name)
                 if down:
                     return download(request, "demo.html")
             elif type_ == "heatmap":
                 result = heatmap(df, title)
                 if result:
                     return download(request, name="demo.png")
+            elif type_ == "boxplot":
+                result = boxplot(df, title, subtitle, x_axis_name, y_axis_name)
+                if down:
+                    return download(request, name="demo.html")
+            elif type_ == "pca":
+                result = pca_analysis(df, title, subtitle, x_axis_name, y_axis_name)
+                if down:
+                    return download(request, name="demo.html")
+            
         if result:
             return redirect("/tools/visual/result")
         return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required(For example: your title).")
 
 
-def fansy_bar(df, title="", subtitle=""):
+def pca_analysis(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
+    try:
+        pca = decomposition.PCA()
+        pca.fit(df)
+        # X_pca = pca.fit_transform(df)
+
+        # visualize the pca result
+        ratio = list(pca.explained_variance_ratio_)
+        eigen_vector = [list(np.abs(i)) for i in pca.components_][:10]
+        page = Page()
+        page.add(
+            Pie()
+            .add(
+                "",
+                [list(z) for z in zip(["PC%d"%(i+1) for i in range(10)], list(ratio))],
+                label_opts=opts.LabelOpts(is_show=True),
+            )
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+                legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
+                xaxis_opts=opts.AxisOpts(name=x_axis_name),
+                yaxis_opts=opts.AxisOpts(name=y_axis_name),
+            ),
+
+            Bar()
+            .add_xaxis(["PC%d"%(i+1) for i in range(10)])
+            .add_yaxis("", ratio)
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+                legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
+                xaxis_opts=opts.AxisOpts(name='Principle\nComponents'),
+                yaxis_opts=opts.AxisOpts(name=y_axis_name),
+                datazoom_opts=[opts.DataZoomOpts()],
+            ),
+        )
+        page.render("./templates/demo.html")
+        return True
+    except Exception as e:
+        print(e)
+
+
+def boxplot(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
+    try:
+        col_name = df.columns
+        xaxis_data = [str(col_name[i]) for i in range(len(col_name))]
+        box_plot = Boxplot().add_xaxis(xaxis_data=xaxis_data)
+        y_data = []
+        for i in range(len(col_name)):
+            y_data.append(list(df[col_name[i]]))
+        box_plot.add_yaxis("", box_plot.prepare_data(y_data))
+        box_plot.set_global_opts(
+            title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
+            xaxis_opts=opts.AxisOpts(
+                type_="category",
+                boundary_gap=True,
+                axislabel_opts=opts.LabelOpts(
+                    interval=0,
+                    rotate= 25,
+                ),
+                splitarea_opts=opts.SplitAreaOpts(is_show=False),
+                splitline_opts=opts.SplitLineOpts(is_show=False),
+            ),
+            yaxis_opts=opts.AxisOpts(
+                type_="value",
+                splitarea_opts=opts.SplitAreaOpts(
+                    is_show=True, areastyle_opts=opts.AreaStyleOpts(opacity=1)
+                ),
+            ),
+        )
+        scatter = (
+            Scatter()
+            .add_xaxis(xaxis_data=xaxis_data)
+            .set_global_opts(
+                xaxis_opts=opts.AxisOpts(
+                    is_show=False,
+                ),
+                yaxis_opts=opts.AxisOpts(
+                    axislabel_opts=opts.LabelOpts(is_show=False),
+                    axistick_opts=opts.AxisTickOpts(is_show=False),
+                ),
+            )
+        )
+        for i in range(len(df)):
+            scatter.add_yaxis(series_name="", y_axis=list(df.iloc[i, :]), symbol_size=10)
+
+        grid = (
+            Grid(opts.InitOpts(height="500px"))
+            .add(
+                box_plot,
+                grid_opts=opts.GridOpts(pos_left="10%", pos_right="10%", pos_bottom="25%"),
+            )
+            .add(
+                scatter,
+                grid_opts=opts.GridOpts(pos_left="10%", pos_right="10%", pos_bottom="25%"),
+            )
+            .render("./templates/demo.html")
+        )
+        
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+
+def fansy_bar(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:
         col_name = df.columns
         b = Bar().add_xaxis([str(df.index[i]) for i in range(len(df))])
@@ -156,7 +270,7 @@ def fansy_bar(df, title="", subtitle=""):
         return False
 
 
-def fansy_scatter(df, title="", subtitle=""):
+def fansy_scatter(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:
         col_name = df.columns
         s = Scatter().add_xaxis([str(df.index[i]) for i in range(len(df))])
@@ -201,7 +315,7 @@ def pairplot(df):
         return False
 
 
-def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high):
+def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high=False):
     try:
         col_name = df.columns
         l = Line().add_xaxis(xaxis_data=[str(df.index[i]) for i in range(len(df))])
@@ -243,7 +357,8 @@ def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high):
         print(e)
         return False
 
-def fansy_line(df, title=""):
+
+def fansy_line(df, title="", x_axis_name="", y_axis_name=""):
     try:
         col_name = df.columns
         background_color_js = (
@@ -420,9 +535,17 @@ def heatmap(df, title=""):
         plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像负号显示为方块问题
         sns.set(font='simhei', font_scale=1.5)
         
+        max_title = 0
         corr = df.corr()
-        plt.figure(figsize = (15, 10))
-        sns.heatmap(corr, cmap='RdBu', linewidths = 0.05).set(title=title)
+        for i in df.columns:
+            if len(i) > max_title:
+                max_title = len(i)
+        if max_title > 9:
+            plt.figure(figsize = (35, 30))
+            sns.heatmap(corr, annot=True, cmap='RdBu', linewidths = 0.05, annot_kws={"size":30}).set_title(label=title, fontdict = {'fontsize': 45})
+        else:
+            plt.figure(figsize = (20, 15))
+            sns.heatmap(corr, annot=True, cmap='RdBu', linewidths = 0.05).set(title=title)
         plt.savefig("./templates/demo.png")
         return True
     except Exception as e:
@@ -430,7 +553,7 @@ def heatmap(df, title=""):
         return False
 
 
-def fansy_pie(df, title="", subtitle=""):
+def fansy_pie(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:    
         col_name = df.columns
         page = Page()
