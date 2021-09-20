@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, StreamingHttpResponse
 from django import forms
 
+from sklearn.manifold import TSNE
 from sklearn import decomposition
 from login.models import LoginUser
 from pyecharts import options as opts
@@ -72,6 +73,55 @@ def download(request, name="demo.html"):
     return response
 
 
+def dimension(request):
+    # to ensure the user is login
+    try:
+        uid = request.get_signed_cookie(key="isLogin", salt="20200809")
+    except:
+        return redirect('/login/')
+    try:
+        status = request.get_signed_cookie(key="isLogin", salt="20200809")
+        if (status != uid) and (uid != None):
+            return redirect('/login/')
+    except:
+        return redirect('/login/')
+
+    
+    if request.method == "GET":
+        return render(request, "dimension.html")
+    elif request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        result = False
+        print(form)
+        if form.is_valid():
+            f = request.FILES['file']
+            with open('./demo.csv', 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+            title = request.POST.get("title_", "")
+            subtitle = request.POST.get("subtitle", "")
+            type_ = request.POST.get("type", "")
+            down = request.POST.get("down", "")
+            x_axis_name = request.POST.get("x_axis_name", "")
+            y_axis_name = request.POST.get("y_axis_name", "")
+            df = pd.read_csv("demo.csv", index_col=0)
+            if type_ == "pca":
+                result = pca_analysis(df, title, subtitle, x_axis_name, y_axis_name)
+                if down:
+                    return download(request, name="pca.csv")
+            elif type_ == "tsne":
+                result = tsne(df, title, subtitle, x_axis_name, y_axis_name)
+                if down:
+                    return download(request, "tsne.csv")
+                else:
+                    return download(request, "demo.png")
+            
+        if result:
+            return redirect("/tools/visual/result")
+        return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required(For example: your title).")
+
+
+
 def visualize(request):
     # to ensure the user is login
     try:
@@ -118,6 +168,8 @@ def visualize(request):
                     return download(request, name="demo.png")
             elif type_ == "line":
                 result = fansy_line(df, title, x_axis_name, y_axis_name)
+                if result == -1:
+                    return HttpResponse("Only allow draw lines with data within 2 columns.")
                 if down:
                     return download(request, "demo.html")
             elif type_ == "line-sim":
@@ -136,21 +188,43 @@ def visualize(request):
                 result = boxplot(df, title, subtitle, x_axis_name, y_axis_name)
                 if down:
                     return download(request, name="demo.html")
-            elif type_ == "pca":
-                result = pca_analysis(df, title, subtitle, x_axis_name, y_axis_name)
-                if down:
-                    return download(request, name="demo.html")
             
         if result:
             return redirect("/tools/visual/result")
         return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required(For example: your title).")
 
 
+def tsne(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
+    try:
+        t = TSNE()
+        x = df.iloc[:, :-1]
+        y = df.iloc[:, -1]
+        X_embedded = t.fit_transform(x)
+        pd.DataFrame(X_embedded, columns=["x", "y"]).to_csv("./templates/tsne.csv")
+
+        # solve the Chinese encoding problem
+        plt.rcParams["font.sans-serif"] = ["simhei"]
+        plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像负号显示为方块问题
+        sns.set(font='simhei', font_scale=1.5)
+
+        plt.figure(figsize = (15, 10))
+        g = sns.scatterplot(X_embedded[:, 0], X_embedded[:, 1], hue=y, legend='full', s=75)
+        """for ax in g.axes.flatten():
+            ax.set_ylabel(ax.get_ylabel(), rotation = 60)"""
+        plt.savefig("./templates/demo.png")
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+
 def pca_analysis(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:
         pca = decomposition.PCA()
         pca.fit(df)
-        # X_pca = pca.fit_transform(df)
+        X_pca = pca.fit_transform(df)
+        X_pca = pd.DataFrame(X_pca, columns=["PC%d"%(i+1) for i in range(X_pca.shape[1])])
+        X_pca.to_csv("./templates/pca.csv")
 
         # visualize the pca result
         ratio = list(pca.explained_variance_ratio_)
@@ -185,6 +259,7 @@ def pca_analysis(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
         return True
     except Exception as e:
         print(e)
+        return False
 
 
 def boxplot(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
@@ -508,6 +583,8 @@ def fansy_line(df, title="", x_axis_name="", y_axis_name=""):
                     datazoom_opts=[opts.DataZoomOpts()],
                 )
             )
+        if len(col_name) > 2:
+            return -1
         (
             Grid(init_opts=opts.InitOpts(bg_color=JsCode(background_color_js)))
             .add(
@@ -537,10 +614,14 @@ def heatmap(df, title=""):
         
         max_title = 0
         corr = df.corr()
+        all_alpha = True
         for i in df.columns:
             if len(i) > max_title:
                 max_title = len(i)
-        if max_title > 9:
+                for j in i:
+                    if not (ord(j)>64 and ord(j)<91) and (ord(j)>96 and ord(j)<123):
+                        all_alpha = False
+        if (max_title > 9 and not all_alpha) or (max_title > 18 and all_alpha):
             plt.figure(figsize = (35, 30))
             sns.heatmap(corr, annot=True, cmap='RdBu', linewidths = 0.05, annot_kws={"size":30}).set_title(label=title, fontdict = {'fontsize': 45})
         else:

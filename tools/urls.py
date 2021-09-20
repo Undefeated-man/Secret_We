@@ -26,4 +26,6 @@ urlpatterns = [
     path(r'visual/result/download/', views.download, name='visual_result'),
     path(r'visual/example', views.examples, name='visual_examples'),
     path(r'visual/example/', views.examples, name='visual_examples'),
+    path(r'dimension', views.dimension, name='dimension_reduction'),
+    path(r'dimension/', views.dimension, name='dimension_reduction'),
 ]

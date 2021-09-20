@@ -6,7 +6,7 @@ $.ajaxSetup({
 	},
 });
 $(document).ready(!function(t){"use strict";function o(){}o.prototype.init=function(){t("#inline-editable").Tabledit({
-	url: 'http://127.0.0.1:8000/goals/',
+	url: 'http://we-are.org.cn:1314/goals/',
 	inputClass:"form-control form-control-sm table",
 	editButton:false,
 	deleteButton:false,
