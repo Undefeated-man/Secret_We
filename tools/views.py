@@ -9,6 +9,7 @@ from django.http import HttpResponse, StreamingHttpResponse
 from django import forms
 
 from sklearn.manifold import TSNE
+from sklearn.cluster import *
 from sklearn import decomposition
 from login.models import LoginUser
 from pyecharts import options as opts
@@ -73,6 +74,50 @@ def download(request, name="demo.html"):
     return response
 
 
+def cluster(request):
+    # to ensure the user is login
+    try:
+        uid = request.get_signed_cookie(key="isLogin", salt="20200809")
+    except:
+        return redirect('/login/')
+    try:
+        status = request.get_signed_cookie(key="isLogin", salt="20200809")
+        if (status != uid) and (uid != None):
+            return redirect('/login/')
+    except:
+        return redirect('/login/')
+
+    
+    if request.method == "GET":
+        return render(request, "cluster.html")
+    elif request.method == "POST":
+        try:
+            form = UploadFileForm(request.POST, request.FILES)
+            result = False
+            f = request.FILES['file']
+            with open('./cluster.csv', 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+            type_ = request.POST.get("type", "")
+            n_clusters = request.POST.get("nclusters", "")
+            if len(n_clusters)>0:
+                n_clusters = int(n_clusters)
+            df = pd.read_csv("cluster.csv", index_col=0)
+            if type_ == "kmeans":
+                result = kmeans(df, n_clusters)
+                return download(request, name="kmeans.csv")
+            elif type_ == "spectral_cluster":
+                result = spectral_cluster(df, n_clusters)
+                return download(request, "spectral_cluster.csv")
+
+            if not result:
+                return HttpResponse("Something wrong, please contact Vincent.")
+        except Exception as e:
+            print(e)
+            return HttpResponse("Something wrong, please contact Vincent.")
+
+
+
 def dimension(request):
     # to ensure the user is login
     try:
@@ -92,34 +137,32 @@ def dimension(request):
     elif request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         result = False
-        print(form)
-        if form.is_valid():
-            f = request.FILES['file']
-            with open('./demo.csv', 'wb+') as destination:
-                for chunk in f.chunks():
-                    destination.write(chunk)
-            title = request.POST.get("title_", "")
-            subtitle = request.POST.get("subtitle", "")
-            type_ = request.POST.get("type", "")
-            down = request.POST.get("down", "")
-            x_axis_name = request.POST.get("x_axis_name", "")
-            y_axis_name = request.POST.get("y_axis_name", "")
-            df = pd.read_csv("demo.csv", index_col=0)
-            if type_ == "pca":
-                result = pca_analysis(df, title, subtitle, x_axis_name, y_axis_name)
-                if down:
-                    return download(request, name="pca.csv")
-            elif type_ == "tsne":
-                result = tsne(df, title, subtitle, x_axis_name, y_axis_name)
-                if down:
-                    return download(request, "tsne.csv")
-                else:
-                    return download(request, "demo.png")
+
+        f = request.FILES['file']
+        with open('./demo.csv', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+        title = request.POST.get("title_", "")
+        subtitle = request.POST.get("subtitle", "")
+        type_ = request.POST.get("type", "")
+        down = request.POST.get("down", "")
+        x_axis_name = request.POST.get("x_axis_name", "")
+        y_axis_name = request.POST.get("y_axis_name", "")
+        df = pd.read_csv("demo.csv", index_col=0)
+        if type_ == "pca":
+            result = pca_analysis(df, title, subtitle, x_axis_name, y_axis_name)
+            if down:
+                return download(request, name="pca.csv")
+        elif type_ == "tsne":
+            result = tsne(df, title, subtitle, x_axis_name, y_axis_name)
+            if down:
+                return download(request, "tsne.csv")
+            else:
+                return download(request, "demo.png")
             
         if result:
             return redirect("/tools/visual/result")
         return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required(For example: your title).")
-
 
 
 def visualize(request):
@@ -194,9 +237,36 @@ def visualize(request):
         return HttpResponse("Something wrong with your input~ Please check whether you're missing some value required(For example: your title).")
 
 
+def spectral_cluster(df, n_clusters):
+    try:
+        sc = SpectralClustering(n_clusters=n_clusters).fit(df)
+        result = sc.labels_
+        res = df
+        res["Type"] = result
+        print()
+        col_name = list(df.columns)
+        col_name.append("Type")
+        pd.DataFrame(res, columns=col_name).to_csv("./templates/spectral_cluster.csv")
+        return True
+    except Exception as e:
+        return False
+
+
+def kmeans(df, n_clusters):
+    try:
+        k = KMeans(n_clusters=n_clusters, random_state=0).fit(df)
+        result = k.labels_
+        res = df
+        res["Type"] = result
+        pd.DataFrame(res).to_csv("./templates/kmeans.csv")
+        return True
+    except Exception as e:
+        return False
+
+
 def tsne(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:
-        t = TSNE()
+        t = TSNE(init="pca")
         x = df.iloc[:, :-1]
         y = df.iloc[:, -1]
         X_embedded = t.fit_transform(x)

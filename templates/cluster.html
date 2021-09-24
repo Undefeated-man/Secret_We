@@ -2,19 +2,19 @@
 <!-- saved from url=(0057)file:///C:/Users/11352/Downloads/Bootswatch_%20Cosmo.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
-    <title>Dimension Reduction</title>
+    <title>Clustering</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="/static/Visualization_files/bootstrap.css">
 		<link rel="stylesheet" href="/static/Visualization_files/font-awesome.min.css">
 		<link rel="stylesheet" href="/static/Visualization_files/prism-okaidia.css">
 		<link rel="stylesheet" href="/static/Visualization_files/custom.min.css">
 		<!-- Global Site Tag (gtag.js) - Google Analytics -->
-		<script type="text/javascript" async="" src="/static/Visualization_files/analytics.js"></script><script async="" src="/static/Visualization_files/js"></script>
+		
 	</head>
 	<body data-new-gr-c-s-check-loaded="14.1027.0" data-gr-ext-installed="">
     <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
       <div class="container">
-        <a href="https://bootswatch.com/" class="navbar-brand">Dimension Reduction & Visualization</a>
+        <a href="https://bootswatch.com/" class="navbar-brand">Cluster</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,8 +32,8 @@
       <div class="page-header" id="banner">
         <div class="row">
           <div class="col-lg-8 col-md-7 col-sm-6">
-            <h1>Dimension Reduction & Visualization</h1>
-            <p class="lead">An DIY Dimension Reduction Tool</p>
+            <h1>Clustering</h1>
+            <p class="lead">A Tool using Unsupevised Machine Learning to auto cluster the data</p>
           </div>
           <div class="col-lg-4 col-md-5 col-sm-6">
           </div>
@@ -46,44 +46,43 @@
         <div class="row">
           <div class="col-lg-6">
             <div class="bs-component">
-				<form enctype="multipart/form-data" method="post" action="/tools/dimension/">
+				<form enctype="multipart/form-data" method="post" action="/tools/cluster/">
 					<fieldset>
-					  <div class="form-group">
-						<label for="type" class="form-label mt-4">你希望用什么方法实现降维呢？</label>
-						<select class="form-select" id="type" name="type">
-							<option value="pca" selected="pca">PCA</option>
-							<option value="tsne">T-SNE(It may take a long time. Please wait patiently.)</option>
-						</select>
-						</div>
-						<br/><hr/>
-						<h4>如果不需要严谨的可视化结果，</h4><h4>可直接忽略以下Optional内容</h4>
-						<hr/>
 						<div class="form-group">
-						  <label for="title" class="form-label mt-4">(Optional)你的可视化标题是：</label>
-						  <input type="text" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Enter your title" name="title">
+							<label for="type" class="form-label mt-4">你希望用什么方法实现聚类呢？</label>
+							<select class="form-select" id="type" name="type">
+								<option value="kmeans" selected="kmeans">K-Means</option>
+								<option value="spectral_cluster">谱聚类</option>
+							</select>	
 						</div>
+						<br/>
 						<div class="form-group">
-						  <label for="subtitle" class="form-label mt-4">(Optional)你的可视化副标题是：</label>
-						  <input type="text" class="form-control" id="subtitle" placeholder="Enter your subtitle" name="subtitle">
-						</div>
-						<div class="form-group">
-						  <label for="x_axis_name" class="form-label mt-4">(Optional)你的x轴名称：</label>
-						  <input type="text" class="form-control" id="x_axis_name" placeholder="Enter your x_axis_name" name="x_axis_name">
-						</div>
-						<div class="form-group">
-						  <label for="y_axis_name" class="form-label mt-4">(Optional)你的y轴名称：</label>
-						  <input type="text" class="form-control" id="y_axis_name" placeholder="Enter your y_axis_name" name="y_axis_name">
+							<label for="nclusters">多少个聚类中心：</label>
+							<select class="form-select" id="nclusters" name="nclusters">
+								<option value="2" selected="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+								<option value="11">11</option>
+								<option value="12">12</option>
+								<option value="13">13</option>
+								<option value="14">14</option>
+								<option value="15">15</option>
+								<option value="16">16</option>
+								<option value="17">17</option>
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
 						</div>
 						<div class="form-group">
 							<label for="file" class="form-label mt-4">Please upload your file(only csv is allowed)</label>
 							<input class="form-control" type="file" id="file" accept=".csv" name="file">
-						</div>
-						<br/>
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" value="1" id="flexCheckChecked" name="down">
-							<label class="form-check-label" for="flexCheckChecked">
-							  是否下载处理好的数据包<p>(不选的话默认跳转页面显示可视化结果)</p>
-							</label>
 						</div>
 						<hr />
 						<button type="submit" class="btn btn-primary">Submit</button>
@@ -99,16 +98,6 @@
       <!-- Indicators
       ================================================== -->
       <div class="bs-docs-section">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="bs-component">
-              <div class="alert alert-dismissible alert-warning">
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                <h4 class="alert-heading">Note</h4>
-                <p class="mb-0">若这个不够用，就找元，她会找我的~ <span>(以下这些图得找我做，暂时不支持自动解析：<a href="/tools/visual/example">点我查看详情</a>)</span></p>
-              </div>
-          </div>
-        </div>
 
       <footer id="footer">
         <div class="row">

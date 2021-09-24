@@ -28,4 +28,6 @@ urlpatterns = [
     path(r'visual/example/', views.examples, name='visual_examples'),
     path(r'dimension', views.dimension, name='dimension_reduction'),
     path(r'dimension/', views.dimension, name='dimension_reduction'),
+    path(r'cluster/', views.cluster, name='cluster'),
+    path(r'cluster', views.cluster, name='cluster'),
 ]
