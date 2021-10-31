@@ -3,15 +3,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import os
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, StreamingHttpResponse
 from django import forms
 
+from json import loads, dumps
 from sklearn.manifold import TSNE
 from sklearn.cluster import *
 from sklearn import decomposition
-from login.models import LoginUser
+from login.models import LoginUser, Track
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Line, Grid, Page, Pie, Radar, Scatter, Boxplot
 from pyecharts.commons.utils import JsCode
@@ -21,6 +23,16 @@ from pyecharts.commons.utils import JsCode
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
     file = forms.FileField()
+    
+
+def track(uid, activity):
+    try:
+        t = Track.objects.create(uid=uid)
+        t.time = time.strftime("%Y-%m-%d_%H:%M:%S:", time.localtime())
+        t.activity = activity
+        t.save()
+    except Exception as e:
+        print(e)
 
 
 def check_list(request):
@@ -74,6 +86,65 @@ def download(request, name="demo.html"):
     return response
 
 
+def upload(request):
+    # to ensure the user is login
+    try:
+        uid = request.get_signed_cookie(key="isLogin", salt="20200809")
+    except:
+        return redirect('/login/')
+    try:
+        status = request.get_signed_cookie(key="isLogin", salt="20200809")
+        if (status != uid) and (uid != None):
+            return redirect('/login/')
+    except:
+        return redirect('/login/')
+
+    # to clean the files too old
+    filetime = {}
+    if not os.path.exists("./templates/file"):
+        os.mkdir("./templates/file")
+    for i in os.listdir("./templates/file"):
+        if (os.path.getmtime("./templates/file/%s"%i)-time.time())//86400 >30:
+            os.remove("./templates/file/%s"%i)
+        
+        
+    if request.method == "GET":
+        return render(request, "upload.html")
+    elif request.method == "POST":
+        try:
+            type_ = request.POST.get("type", "")
+            token = request.POST.get("title", "")
+            try:
+                with open("tokens.json", "r") as f_t:
+                    tokens = loads(f_t.read())
+            except:
+                tokens = {}
+                
+            if type_ == "upload":
+                track(uid, "Upload-upload")
+                form = UploadFileForm(request.POST, request.FILES)
+                name = request.FILES['filename'].name
+                result = False
+                f = request.FILES['file']
+                with open('./templates/file/%s'%name, 'wb+') as destination:
+                    for chunk in f.chunks():
+                        destination.write(chunk)
+                tokens[token] = name
+                with open("tokens.json", "w") as f_t:
+                    f_t.write(dumps(tokens))
+                return HttpResponse("Successfully upload!")
+            elif type_ == "receive":
+                track(uid, "Upload-receive")
+                if token in list(tokens.key()):
+                    return download(request, "file/"+tokens[token])
+                else:
+                    return HttpResponse("Please check your token! Is it right?")
+
+        except Exception as e:
+            print(e)
+            return HttpResponse("Something wrong, please contact Vincent.")
+
+
 def cluster(request):
     # to ensure the user is login
     try:
@@ -105,9 +176,11 @@ def cluster(request):
             df = pd.read_csv("cluster.csv", index_col=0)
             if type_ == "kmeans":
                 result = kmeans(df, n_clusters)
+                track(uid, "Cluster-kmeans")
                 return download(request, name="kmeans.csv")
             elif type_ == "spectral_cluster":
                 result = spectral_cluster(df, n_clusters)
+                track(uid, "Cluster-spectral_cluster")
                 return download(request, "spectral_cluster.csv")
 
             if not result:
@@ -151,10 +224,12 @@ def dimension(request):
         df = pd.read_csv("demo.csv", index_col=0)
         if type_ == "pca":
             result = pca_analysis(df, title, subtitle, x_axis_name, y_axis_name)
+            track(uid, "Dimension-PCA")
             if down:
                 return download(request, name="pca.csv")
         elif type_ == "tsne":
             result = tsne(df, title, subtitle, x_axis_name, y_axis_name)
+            track(uid, "Dimension-TSNE")
             if down:
                 return download(request, "tsne.csv")
             else:
@@ -199,36 +274,44 @@ def visualize(request):
             df = pd.read_csv("demo.csv", index_col=0)
             if type_ == "bar":
                 result = fansy_bar(df, title, subtitle, x_axis_name, y_axis_name)
+                track(uid, "Visualize-bar")
                 if down:
                     return download(request, "demo.html")
             elif type_ == "pie":
                 result = fansy_pie(df, title, subtitle, x_axis_name, y_axis_name)
+                track(uid, "Visualize-pie")
                 if down:
                     return download(request, "demo.html")
             elif type_ == "pair":
                 result = pairplot(df)
+                track(uid, "Visualize-pairplot")
                 if result:
                     return download(request, name="demo.png")
             elif type_ == "line":
                 result = fansy_line(df, title, x_axis_name, y_axis_name)
+                track(uid, "Visualize-line")
                 if result == -1:
                     return HttpResponse("Only allow draw lines with data within 2 columns.")
                 if down:
                     return download(request, "demo.html")
             elif type_ == "line-sim":
                 result = sim_line(df, title, subtitle, x_axis_name, y_axis_name, high)
+                track(uid, "Visualize-line_simple")
                 if down:
                     return download(request, "demo.html")
             elif type_ == "scatter":
                 result = fansy_scatter(df, title, subtitle, x_axis_name, y_axis_name)
+                track(uid, "Visualize-scatter")
                 if down:
                     return download(request, "demo.html")
             elif type_ == "heatmap":
                 result = heatmap(df, title)
+                track(uid, "Visualize-heatmap")
                 if result:
                     return download(request, name="demo.png")
             elif type_ == "boxplot":
                 result = boxplot(df, title, subtitle, x_axis_name, y_axis_name)
+                track(uid, "Visualize-boxplot")
                 if down:
                     return download(request, name="demo.html")
             
@@ -281,6 +364,8 @@ def tsne(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
         g = sns.scatterplot(X_embedded[:, 0], X_embedded[:, 1], hue=y, legend='full', s=75)
         """for ax in g.axes.flatten():
             ax.set_ylabel(ax.get_ylabel(), rotation = 60)"""
+        plt.xticks([])
+        plt.yticks([])
         plt.savefig("./templates/demo.png")
         return True
     except Exception as e:
@@ -335,11 +420,26 @@ def pca_analysis(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
 def boxplot(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:
         col_name = df.columns
-        xaxis_data = [str(col_name[i]) for i in range(len(col_name))]
+        xaxis_data = []
+        max_title = 0
+        for i in range(len(col_name)):
+            xaxis_data.append(str(col_name[i]))
+            if len(str(col_name[i])) > max_title:
+                max_title = len(str(col_name[i]))
         box_plot = Boxplot().add_xaxis(xaxis_data=xaxis_data)
         y_data = []
         for i in range(len(col_name)):
             y_data.append(list(df[col_name[i]]))
+        min_value = np.floor(df.min().min()*0.9)
+        all_alpha = True
+        for i in df.columns:
+            if len(i) > max_title:
+                max_title = len(i)
+                for j in i:
+                    if not (ord(j)>64 and ord(j)<91) and (ord(j)>96 and ord(j)<123):
+                        all_alpha = False
+        if (max_title > 9 and not all_alpha) or (max_title > 20 and all_alpha) or len(col_name)==1:
+            rotation = 0
         box_plot.add_yaxis("", box_plot.prepare_data(y_data))
         box_plot.set_global_opts(
             title_opts=opts.TitleOpts(title=title, subtitle=subtitle, pos_left="center"),
@@ -348,7 +448,7 @@ def boxplot(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
                 boundary_gap=True,
                 axislabel_opts=opts.LabelOpts(
                     interval=0,
-                    rotate= 25,
+                    rotate= rotation,
                 ),
                 splitarea_opts=opts.SplitAreaOpts(is_show=False),
                 splitline_opts=opts.SplitLineOpts(is_show=False),
@@ -358,6 +458,7 @@ def boxplot(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
                 splitarea_opts=opts.SplitAreaOpts(
                     is_show=True, areastyle_opts=opts.AreaStyleOpts(opacity=1)
                 ),
+                min_=min_value,
             ),
         )
         scatter = (
@@ -370,6 +471,7 @@ def boxplot(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
                 yaxis_opts=opts.AxisOpts(
                     axislabel_opts=opts.LabelOpts(is_show=False),
                     axistick_opts=opts.AxisTickOpts(is_show=False),
+                    min_=min_value,
                 ),
             )
         )
@@ -419,6 +521,7 @@ def fansy_scatter(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
     try:
         col_name = df.columns
         s = Scatter().add_xaxis([str(df.index[i]) for i in range(len(df))])
+        min_value = np.floor(df.min().min()*0.9)
         if len(df) < 20:
             for i in range(len(col_name)):
                 s.add_yaxis(col_name[i], list(df[col_name[i]]))
@@ -431,7 +534,7 @@ def fansy_scatter(df, title="", subtitle="", x_axis_name="", y_axis_name=""):
             #visualmap_opts=opts.VisualMapOpts(),
             tooltip_opts=opts.TooltipOpts(is_show=True),
             xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), name=x_axis_name),
-            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), name=y_axis_name),
+            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), name=y_axis_name, min_=min_value,),
             datazoom_opts=[opts.DataZoomOpts()],
         )
         s.render("./templates/demo.html")
@@ -464,6 +567,7 @@ def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high=Fal
     try:
         col_name = df.columns
         l = Line().add_xaxis(xaxis_data=[str(df.index[i]) for i in range(len(df))])
+        min_value = np.floor(df.min().min()*0.9)
         for i in range(len(col_name)):
             l.add_yaxis(
                 series_name=col_name[i],
@@ -486,7 +590,7 @@ def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high=Fal
                 toolbox_opts=opts.ToolboxOpts(is_show=True),
                 datazoom_opts=[opts.DataZoomOpts()],
                 xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False, name=x_axis_name),
-                yaxis_opts=opts.AxisOpts(name=y_axis_name),
+                yaxis_opts=opts.AxisOpts(name=y_axis_name, min_=min_value,),
             )
         else:
             l.set_global_opts(
@@ -494,7 +598,7 @@ def sim_line(df, title="", subtitle="", x_axis_name="", y_axis_name="", high=Fal
                 legend_opts = opts.LegendOpts(type_="scroll", orient="vertical", pos_right="2%"),
                 datazoom_opts=[opts.DataZoomOpts()],
                 xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False, name=x_axis_name),
-                yaxis_opts=opts.AxisOpts(name=y_axis_name),
+                yaxis_opts=opts.AxisOpts(name=y_axis_name, min_=min_value,),
             )
         l.render("./templates/demo.html")
         return True

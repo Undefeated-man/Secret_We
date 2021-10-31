@@ -1,8 +1,19 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from login.models import LoginUser
+from login.models import LoginUser, Track
 from goals.models import Goals, Together
+
+
+def track(uid, activity):
+    try:
+        t = Track.objects.create(uid=uid)
+        t.time = time.strftime("%Y-%m-%d_%H:%M:%S:", time.localtime())
+        t.activity = activity
+        t.save()
+    except Exception as e:
+        print(e)
+        
 
 # Create your views here.
 def goals(request, uid=None):
@@ -81,6 +92,7 @@ def goals(request, uid=None):
         interest = clean_str(request.POST.get("interest", ""))
         edit = True
         new = False
+        track(uid, "Edit the semester goals")
         if gid != "" and gid != "None":
             t = Goals.objects.get(gid=gid)
         else:
@@ -130,6 +142,7 @@ def together(request):
         print(name, des)
         t = Together.objects.create(name=name, describe=des, type=type_of_t)
     if tid != "" or name != "":
+        track(uid, "Add something to do together.")
         t.save()
     return redirect("/home/")
 

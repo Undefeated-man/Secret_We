@@ -30,4 +30,6 @@ urlpatterns = [
     path(r'dimension/', views.dimension, name='dimension_reduction'),
     path(r'cluster/', views.cluster, name='cluster'),
     path(r'cluster', views.cluster, name='cluster'),
+    path(r'upload', views.upload, name='upload'),
+    path(r'upload/', views.upload, name='upload'),
 ]

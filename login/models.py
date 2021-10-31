@@ -12,3 +12,18 @@ class LoginUser(models.Model):
     class Meta:
         managed = False
         db_table = 'login_user'
+
+
+# Create your models here.
+class Track(models.Model):
+    tid = models.AutoField(primary_key=True)
+    uid = models.CharField(max_length=20)
+    time = models.CharField(primary_key=True, max_length=50)
+    activity = models.CharField(, max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        managed = False
+        db_table = 'login_track'
